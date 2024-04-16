@@ -2,9 +2,7 @@ BASH_ENV := .env
 ENV := .env
 
 dotenv: # Import dotenv variables
-	@ set -a && \
-		. ./.env && \
-		set +a && \
+	@ set -a && . ./.env && set +a && \
 		$${SHELL}
 
 dev:
@@ -12,10 +10,13 @@ dev:
 
 
 init:
-	cd terraform && terraform init
+	set -a && . ./.env && set +a && \
+		cd terraform && terraform init
 
 plan:
-	cd terraform && terraform plan
+	set -a && . ./.env && set +a && \
+		cd terraform && terraform plan
 
 apply:
-	cd terraform && terraform apply
+	set -a && . ./.env && set +a && \
+		cd terraform && terraform apply
