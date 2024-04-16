@@ -26,17 +26,20 @@ def test_file():
     delete_item(item_key)
 
 
+@pytest.mark.fast
 def test_env_var():
     assert 'AWS_REGION' in os.environ
 
 
+@pytest.mark.slow
 def test_list_buckets():
     assert os.environ['AWS_S3_AUDIO_BUCKET_NAME'] in list_buckets()
 
 
-# Super bad test, but it's fine...
-# If this test fails halfway, we are left with a dangling file in the bucket
+@pytest.mark.slow
 def test_upload_and_delete_file():
+    # Super bad test, but it's fine...
+    # If this test fails halfway, we are left with a dangling file in the bucket
     item_path = Path('test/audio/audio_gettysburg.wav')
     item_key = 'test.wav'
     assert item_path.exists()
@@ -50,6 +53,7 @@ def test_upload_and_delete_file():
         assert not item_exists(item_key)
 
 
+@pytest.mark.slow
 def test_create_presigned_download_url(test_file):
     url = create_presigned_download_url(test_file)
     assert url is not None
@@ -60,6 +64,7 @@ def test_create_presigned_download_url(test_file):
     assert response.status_code == 200
 
 
+@pytest.mark.slow
 def test_create_presigned_upload_url():
     item_path = Path('test/audio/audio_gettysburg.wav')
     item_key = 'test.wav'
@@ -68,10 +73,10 @@ def test_create_presigned_upload_url():
     try:
         with open(item_path, 'rb') as f:
             files = {'file': (item_path.as_posix(), f)}
-            response = requests.post(url_obj['url'], data=url_obj['fields'], files=files)
+            response = requests.post(
+                url_obj['url'], data=url_obj['fields'], files=files)
             assert response.status_code == 204
             assert item_exists(item_key)
-    finally:    
+    finally:
         delete_item(item_key)
         assert not item_exists(item_key)
-    assert False
