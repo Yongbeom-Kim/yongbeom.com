@@ -27,16 +27,19 @@ def test_file():
 
 
 @pytest.mark.fast
+@pytest.mark.s3
 def test_env_var():
     assert 'AWS_REGION' in os.environ
 
 
 @pytest.mark.slow
+@pytest.mark.s3
 def test_list_buckets():
     assert os.environ['AWS_S3_AUDIO_BUCKET_NAME'] in list_buckets()
 
 
 @pytest.mark.slow
+@pytest.mark.s3
 def test_upload_and_delete_file():
     # Super bad test, but it's fine...
     # If this test fails halfway, we are left with a dangling file in the bucket
@@ -54,6 +57,7 @@ def test_upload_and_delete_file():
 
 
 @pytest.mark.slow
+@pytest.mark.s3
 def test_create_presigned_download_url(test_file):
     url = create_presigned_download_url(test_file)
     assert url is not None
@@ -65,6 +69,7 @@ def test_create_presigned_download_url(test_file):
 
 
 @pytest.mark.slow
+@pytest.mark.s3
 def test_create_presigned_upload_url():
     item_path = Path('test/audio/audio_gettysburg.wav')
     item_key = 'test.wav'
