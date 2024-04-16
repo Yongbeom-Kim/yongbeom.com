@@ -1,6 +1,6 @@
 from dotenv import load_dotenv
 from flask import Flask, jsonify, request
-from src.lib.aws_s3 import create_presigned_upload_url
+from src.api.aws_s3 import create_presigned_upload_url
 load_dotenv()
 
 # FIXME: this needs to depend on user + date or some other thing.
