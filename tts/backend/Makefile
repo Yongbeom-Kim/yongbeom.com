@@ -12,10 +12,10 @@ dev:
 
 
 init:
-	terraform init
+	cd terraform && terraform init
 
 plan:
-	terraform plan
+	cd terraform && terraform plan
 
 apply:
-	terraform apply
+	cd terraform && terraform apply
