@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 import pytest
-from src.lib.aws_s3 import (
+from src.api.aws_s3 import (
     create_presigned_download_url,
     create_presigned_upload_url,
     list_buckets,

@@ -3,7 +3,7 @@ import os
 import requests
 
 Model = Literal["tiny", "base", "small", "medium", "large-v1", "large-v2"]
-JobStatus = Literal['IN_PROGRESS', 'COMPLETED', 'ERROR', 'IN_QUEUE']
+JobStatus = Literal['IN_PROGRESS', 'COMPLETED', 'ERROR', 'IN_QUEUE', 'FAILED']
 Transcript = List[TypedDict(
     'TranscriptSegment', {'start': float, 'end': float, 'text': str})]
 
@@ -46,6 +46,8 @@ def get_task_status(result_request_response: requests.Response) -> JobStatus:
             return 'IN_PROGRESS'
         case 'IN_QUEUE':
             return 'IN_QUEUE'
+        case 'FAILED':
+            return 'FAILED'
 
     raise ValueError(f'Unknown task status, {result_request_response.json()}')
 

@@ -6,7 +6,8 @@ dotenv: # Import dotenv variables
 		$${SHELL}
 
 dev:
-	flask --app src.app:app run --reload
+	@ set -a && . ./.env && set +a && \
+		flask --app src.app:app run --reload
 
 
 init:
