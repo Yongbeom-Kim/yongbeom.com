@@ -56,7 +56,7 @@ export const request_transcription_status: ((job_id: string) => Promise<{success
     }
 }
 
-export const request_transcription_text: ((job_id: string) => Promise<{success: boolean, text: string, error: string}>) = async (job_id: string) => {
+export const request_transcription_text: ((job_id: string) => Promise<{success: boolean, text: {end: number, start: number, text: string}[], error: string}>) = async (job_id: string) => {
     const res = await axios.get('/api/get_transcription',{params:{job_id:job_id}});
 
     switch (res.status) {
