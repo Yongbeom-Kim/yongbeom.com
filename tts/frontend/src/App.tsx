@@ -29,6 +29,7 @@ function App() {
 
   const onSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
+    setFile(null);
 
     setStatus("UPLOADING");
     setMessage("Uploading file...");
