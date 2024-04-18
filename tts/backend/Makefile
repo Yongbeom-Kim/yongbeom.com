@@ -43,6 +43,7 @@ init:
 
 plan:
 	DIR=terraform/lambda_ecr TF_ACTION=plan $(MAKE) tf
+	$(MAKE) docker_build
 	DIR=terraform TF_ACTION=plan $(MAKE) tf
 
 apply:
