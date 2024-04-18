@@ -23,9 +23,28 @@ data "aws_iam_policy_document" "assume_role" {
   }
 }
 
+data "aws_iam_policy_document" "lambda_logs_policy" {
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents"
+    ]
+
+    resources = ["*"]
+  }
+}
+
 resource "aws_iam_role" "iam_for_lambda" {
   name               = "iam_for_lambda"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
+  inline_policy {
+    name   = "lambda_logs_policy"
+    policy = data.aws_iam_policy_document.lambda_logs_policy.json
+
+  }
 }
 
 resource "aws_lambda_function" "backend" {
@@ -44,6 +63,13 @@ resource "aws_lambda_function" "backend" {
 resource "aws_lambda_function_url" "backend_url" {
   function_name      = aws_lambda_function.backend.function_name
   authorization_type = "NONE"
+
+  cors {
+    allow_methods = ["GET", "POST"]
+    allow_origins = ["*"]
+    allow_headers = ["*"]
+
+  }
 }
 
 output "backend_lambda_url" {

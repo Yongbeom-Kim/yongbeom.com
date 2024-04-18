@@ -6,12 +6,20 @@ from dotenv import load_dotenv
 import boto3
 import botocore
 
-load_dotenv()
 
+load_dotenv('.env.prod')
+
+auth_object = {
+    'region_name': os.getenv('AWS_REGION'),
+    'aws_access_key_id': os.getenv('AWS_PUBLIC_KEY'),
+    'aws_secret_access_key': os.getenv('AWS_SECRET_KEY'),
+}
 bucket_name = os.environ['AWS_S3_AUDIO_BUCKET_NAME']
 url_expiration = int(os.environ['AWS_PRESIGNED_URL_EXPIRATION'])
-
-s3 = boto3.resource('s3')
+session = boto3.Session(
+    **auth_object
+)
+s3 = session.resource('s3')
 bucket = s3.Bucket(bucket_name)
 
 
@@ -45,7 +53,7 @@ def create_presigned_download_url(object_name, expiration=url_expiration):
     """
 
     try:
-        s3_client = boto3.client('s3')
+        s3_client = boto3.client('s3', **auth_object)
         response = s3_client.generate_presigned_url('get_object',
                                                     Params={'Bucket': bucket_name,
                                                             'Key': object_name},
@@ -72,7 +80,7 @@ def create_presigned_upload_url(object_name, expiration=url_expiration):
 
     # Generate a presigned S3 POST URL
     try:
-        s3_client = boto3.client('s3')
+        s3_client = boto3.client('s3', **auth_object)
         response = s3_client.generate_presigned_post(bucket_name,
                                                      object_name,
                                                      Fields=None,

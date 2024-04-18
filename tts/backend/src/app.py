@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 from flask import Flask, jsonify, request
 from src.api.aws_s3 import create_presigned_upload_url, create_presigned_download_url
 from src.api.runpod import submit_audio_request, submit_audio, get_task_status, submit_result_request, get_transcription
+from pprint import pformat
 load_dotenv()
 
 # FIXME: this needs to depend on user + date or some other thing.
@@ -40,7 +41,7 @@ def get_transcription_status_endpoint():
     job_id = request.args.get('job_id')
     status = get_task_status(submit_result_request(job_id))
     if status == 'ERROR':
-        return jsonify(status=status), 500
+        return jsonify(status="Something went wrong in getting the transcription status. Likely not found."), 404
     return jsonify(status=status), 200
 
 
