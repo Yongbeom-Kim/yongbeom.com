@@ -93,7 +93,7 @@ def submit_audio_request(wav_file_url: str, model_name: Model = 'base') -> reque
             "model": model_name,
             "transcription": "plain_text",
             "translate": False,
-            "language": "en",
+            # "language": "en",
             "temperature": 0,
             "best_of": 5,
             "beam_size": 5,

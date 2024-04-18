@@ -28,7 +28,7 @@ def transcribe_object():
     if download_url is None:
         return jsonify(message="No file found"), 404
     
-    success, job_id, error = submit_audio(submit_audio_request(download_url, 'tiny'),)
+    success, job_id, error = submit_audio(submit_audio_request(download_url, 'large-v2'),)
     if not success:
         return jsonify(message=error), 500
     

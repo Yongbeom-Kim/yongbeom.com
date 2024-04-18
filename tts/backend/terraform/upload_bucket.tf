@@ -1,6 +1,10 @@
-resource "aws_s3_bucket" "upload_bucket" {
-  bucket = var.s3_bucket_name
+variable "s3_bucket_name" {
+  type = string
+}
 
+resource "aws_s3_bucket" "upload_bucket" {
+  bucket        = var.s3_bucket_name
+  force_destroy = true
   tags = {
     Managed_By  = "Terraform"
     Environment = "Production"
