@@ -94,4 +94,4 @@ test/
 terraform/
 
 # Environment variables for building
-.build.env
+.env.deploy
