@@ -15,10 +15,6 @@ s3 = boto3.resource('s3')
 bucket = s3.Bucket(bucket_name)
 
 
-def list_buckets() -> List[str]:
-    return [bucket.name for bucket in s3.buckets.all()]
-
-
 def upload_file(local_file_path: Path, bucket_file_key: str) -> List[str]:
     assert local_file_path.exists(), f"File not found: {local_file_path}"
     assert local_file_path.is_file(), f"Not a file: {local_file_path}"

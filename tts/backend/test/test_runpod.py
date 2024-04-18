@@ -1,6 +1,6 @@
 from time import sleep
 import pytest
-from src.lib.runpod import (
+from src.api.runpod import (
     submit_audio,
     get_task_status,
     get_transcription,

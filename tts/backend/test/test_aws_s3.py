@@ -5,10 +5,10 @@ import pytest
 from src.api.aws_s3 import (
     create_presigned_download_url,
     create_presigned_upload_url,
-    list_buckets,
     upload_file,
     item_exists,
-    delete_item
+    delete_item,
+    s3
 )
 import requests
 
@@ -34,8 +34,8 @@ def test_env_var():
 
 @pytest.mark.slow
 @pytest.mark.s3
-def test_list_buckets():
-    assert os.environ['AWS_S3_AUDIO_BUCKET_NAME'] in list_buckets()
+def test_bucket_exists():
+    s3.meta.client.head_bucket(Bucket=os.environ['AWS_S3_AUDIO_BUCKET_NAME'])
 
 
 @pytest.mark.slow
