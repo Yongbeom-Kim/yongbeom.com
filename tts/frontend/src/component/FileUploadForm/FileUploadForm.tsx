@@ -1,5 +1,6 @@
 import classNames from "classnames";
 import { AudioFileIcon } from "../Icons/AudioFileIcon";
+import { shorten_file_name } from "../../utils/file_name_shortener";
 
 type FileUploadFormProps = {
   file: File | null;
@@ -34,7 +35,7 @@ const FileUploadForm: React.FC<FileUploadFormProps> = ({
           "transition-all ease-in-out cursor-pointer"
         )}
       >
-        <AudioFileIcon className="fill-white h-9 mr-2" /> Select Audio File
+        <AudioFileIcon className="fill-white h-9 mr-2" /> Select File
       </label>
       <button
         type="submit"
@@ -51,7 +52,7 @@ const FileUploadForm: React.FC<FileUploadFormProps> = ({
       >
         <div className="h-9 flex flex-row items-center justify-center">
           {file === null && "Upload File"}
-          {file !== null && `Upload (File: ${file!.name})`}
+          {file !== null && `Upload (File: ${shorten_file_name(file!.name, 9)})`}
         </div>
       </button>
       <input
