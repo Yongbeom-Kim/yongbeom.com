@@ -110,6 +110,7 @@ function App() {
         readOnly
         className={classNames(
           "w-8/12 py-1 resize-none mx-auto mb-10 h-full border-slate-700 border-[1px] border-solid rounded-xl focus:outline-none active:outline-none",
+          "bg-white disabled:bg-white", 
           { "text-red-800": status === "ERROR" }
         )}
       ></textarea>
