@@ -1,8 +1,10 @@
 import axios from "axios";
 
+const BACKEND_PATH = import.meta.env.VITE_BACKEND_ROUTE
+
 const get_s3_presigned_upload_link = async (s3_bucket_object_key: string) => {
     // FIXME: handle error
-    const res = await axios.post("/api/get_presigned_upload_link", {
+    const res = await axios.post(`${BACKEND_PATH}/get_presigned_upload_link`, {
         s3_bucket_object_key: s3_bucket_object_key,
       });
     return {
@@ -31,7 +33,7 @@ export const upload_file_s3 = async (s3_bucket_object_key: string, file: File) =
 }
 
 export const request_transcribe_object: ((s3_bucket_object_key: string) => Promise<{success: boolean, job_id: string, error: string}>) = async (s3_bucket_object_key: string) => {
-    const res = await axios.post("/api/transcribe_object", {'s3_bucket_object_key':s3_bucket_object_key});
+    const res = await axios.post(`${BACKEND_PATH}/transcribe_object`, {'s3_bucket_object_key':s3_bucket_object_key});
     switch (res.status) {
         case 200:
             return {success: true, job_id: res.data["job_id"], error: ""}
@@ -44,7 +46,7 @@ export const request_transcribe_object: ((s3_bucket_object_key: string) => Promi
 }
 
 export const request_transcription_status: ((job_id: string) => Promise<{success: boolean, status: string, error: string}>) = async (job_id: string) => {
-    const res = await axios.get('/api/get_transcription_status',{params:{job_id:job_id}});
+    const res = await axios.get(`${BACKEND_PATH}/get_transcription_status`,{params:{job_id:job_id}});
 
     switch (res.status) {
         case 200:
@@ -57,7 +59,7 @@ export const request_transcription_status: ((job_id: string) => Promise<{success
 }
 
 export const request_transcription_text: ((job_id: string) => Promise<{success: boolean, text: {end: number, start: number, text: string}[], error: string}>) = async (job_id: string) => {
-    const res = await axios.get('/api/get_transcription',{params:{job_id:job_id}});
+    const res = await axios.get(`${BACKEND_PATH}/get_transcription`,{params:{job_id:job_id}});
 
     switch (res.status) {
         case 200:

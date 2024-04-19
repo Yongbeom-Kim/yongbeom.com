@@ -1,6 +1,5 @@
 import classNames from "classnames";
 import { AudioFileIcon } from "../Icons/AudioFileIcon";
-import { useState, useEffect } from "react";
 
 type FileUploadFormProps = {
   file: File | null;

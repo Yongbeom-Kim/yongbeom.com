@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import {
   request_transcribe_object,
@@ -36,8 +36,12 @@ function App() {
     if (file === null || file.type !== "audio/wav") {
       setStatus("ERROR");
       setErrorMessage("File must be of type audio/wav");
+      return
     }
-    await upload_file_s3("test.wav", file);
+    await upload_file_s3("test.wav", file).catch((e) => {
+      setStatus("ERROR");
+      setErrorMessage(`Something went wrong: ${e.message}`);
+    })
 
     setStatus("TRANSCRIBING");
     setMessage("Requesting File Transcription...");
@@ -85,6 +89,7 @@ function App() {
       setTextareaValue(message);
     }
   }, [status, transcript, errorMessage, message]);
+
   // TODO: Clean up textarea and classes, separate into its own component
   return (
     <div className="relative h-screen w-screen scroll-x-auto flex flex-col">
