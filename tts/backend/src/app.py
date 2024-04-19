@@ -1,8 +1,13 @@
 from dotenv import load_dotenv
 from flask import Flask, jsonify, request
 from src.api.aws_s3 import create_presigned_upload_url, create_presigned_download_url
-from src.api.runpod import submit_audio_request, submit_audio, get_task_status, submit_result_request, get_transcription
-# from pprint import pformat
+from src.api.runpod import (
+    submit_audio_request,
+    submit_audio,
+    get_task_status,
+    submit_result_request,
+    get_transcription
+)
 # from flask_cors import CORS
 # CORS handled by lambda.
 
@@ -11,6 +16,7 @@ load_dotenv()
 # FIXME: this needs to depend on user + date or some other thing.
 app = Flask(__name__)
 # CORS(app)
+
 
 @app.route('/')
 def landing():
@@ -31,11 +37,12 @@ def transcribe_object():
     download_url = create_presigned_download_url(s3_bucket_object_key)
     if download_url is None:
         return jsonify(message="No file found"), 404
-    
-    success, job_id, error = submit_audio(submit_audio_request(download_url, 'large-v2'),)
+
+    success, job_id, error = submit_audio(
+        submit_audio_request(download_url, 'large-v2'),)
     if not success:
         return jsonify(message=error), 500
-    
+
     return jsonify(job_id=job_id), 200
 
 
@@ -44,7 +51,9 @@ def get_transcription_status_endpoint():
     job_id = request.args.get('job_id')
     status = get_task_status(submit_result_request(job_id))
     if status == 'ERROR':
-        return jsonify(status="Something went wrong in getting the transcription status. Likely not found."), 404
+        return (jsonify(
+            status="Something went wrong in getting the transcription status. Likely not found."),
+            404)
     return jsonify(status=status), 200
 
 
@@ -62,5 +71,5 @@ def get_transcription_endpoint():
     transcription = get_transcription(response)
     if transcription is None:
         return jsonify(message="Something went wrong"), 400
-    
+
     return jsonify(transcription=transcription), 200

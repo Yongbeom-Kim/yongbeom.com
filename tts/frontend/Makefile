@@ -20,4 +20,4 @@ plan: init
 
 apply: init build
 	@ set -a && . ./.env.terraform && set +a && \
-	cd terraform && terraform apply
+	cd terraform && terraform apply -auto-approve
