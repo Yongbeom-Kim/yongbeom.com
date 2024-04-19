@@ -5,8 +5,6 @@ variable "website_bucket_name" {
 
 resource "aws_s3_bucket" "frontend" {
   bucket = var.website_bucket_name
-
-  tags = local.tag
 }
 
 resource "aws_s3_bucket_website_configuration" "frontend" {

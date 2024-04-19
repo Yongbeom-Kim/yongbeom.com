@@ -68,7 +68,6 @@ resource "aws_lambda_function_url" "backend_url" {
     allow_methods = ["GET", "POST"]
     allow_origins = ["*"]
     allow_headers = ["*"]
-
   }
 }
 

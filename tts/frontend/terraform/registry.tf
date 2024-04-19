@@ -13,11 +13,11 @@ terraform {
 
 provider "aws" {
   region = var.aws_region
-}
 
-locals {
-  tag = {
-    ManagedBy   = "Terraform"
-    Application = "tts.yongbeom.com"
+  default_tags {
+    tags = {
+      ManagedBy = "Terraform"
+      Application = "tts.yongbeom.com"
+    }
   }
 }

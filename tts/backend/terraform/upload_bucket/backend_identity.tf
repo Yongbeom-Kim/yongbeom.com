@@ -8,10 +8,6 @@ variable "backend_iam_user_path" {
 resource "aws_iam_user" "backend_user" {
   name = var.backend_iam_user_name
   path = var.backend_iam_user_path
-
-  tags = {
-    Managed_By = "Terraform"
-  }
 }
 
 resource "aws_iam_user_policy" "backend_s3_policy" {

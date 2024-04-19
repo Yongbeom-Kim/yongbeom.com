@@ -9,10 +9,6 @@ variable "canonical_owner_id" {
 resource "aws_s3_bucket" "upload_bucket" {
   bucket        = var.s3_bucket_name
   force_destroy = true
-  tags = {
-    Managed_By  = "Terraform"
-    Environment = "Production"
-  }
 }
 
 resource "aws_s3_bucket_cors_configuration" "upload_bucket" {
@@ -59,5 +55,4 @@ data "aws_iam_policy_document" "allow_access_from_iam_account" {
       "${aws_s3_bucket.upload_bucket.arn}/*",
     ]
   }
-
 }
