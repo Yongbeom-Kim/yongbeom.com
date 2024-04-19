@@ -101,7 +101,8 @@ def test_submit_result_request_invalid_id():
 def test_submit_result_request():
     success, id, error = submit_audio(submit_audio_request(sample_audio_url, 'tiny'))
     assert success
-    assert get_task_status(submit_result_request(id)) in ('IN_PROGRESS', 'IN_QUEUE')
-
-    sleep(10)
-    assert get_task_status(submit_result_request(id)) == 'COMPLETED'
+    status = get_task_status(submit_result_request(id))
+    assert status in ('IN_PROGRESS', 'IN_QUEUE', 'COMPLETED')
+    if status != 'COMPLETED':
+        sleep(10)
+        assert get_task_status(submit_result_request(id)) == 'COMPLETED'

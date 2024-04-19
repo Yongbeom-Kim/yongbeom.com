@@ -5,12 +5,10 @@ backend_aws_iam_access_key := $(shell terraform output -raw -state=$(backend_aws
 backend_aws_iam_secret_key := $(shell terraform output -raw -state=$(backend_aws_iam_tfstate_file) backend_iam_secret_key)
 
 dev:
-	@ set -a && . ./.env.prod && set +a && \
-		flask --app src.app:app run --reload
+	$(MAKE) docker_run
 
-test:
-	@ set -a && . ./.env.prod && set +a && \
-		pytest
+test: 
+	COMMAND="pytest" $(MAKE) docker_run_cmd
 
 ## Docker
 
@@ -28,9 +26,13 @@ docker_run: docker_build
 	@ set -a && . ./.env.deploy && set +a && \
 		docker run -p 5000:8080 $${DOCKER_IMAGE_TAG}
 
-docker_run_bash: docker_build
+docker_run_cmd: docker_build
 	@ set -a && . ./.env.deploy && set +a && \
-		docker run -it --entrypoint=/bin/bash $${DOCKER_IMAGE_TAG} -i
+		docker run -it $${DOCKER_IMAGE_TAG} $(COMMAND)
+
+docker_run_bash: 
+	COMMAND=/bin/bash $(MAKE) docker_run_cmd
+
 
 docker_login:
 	@ set -a && . ./.env.deploy && set +a && \
