@@ -3,11 +3,13 @@ from flask import Flask, jsonify, request
 from src.api.aws_s3 import create_presigned_upload_url, create_presigned_download_url
 from src.api.runpod import submit_audio_request, submit_audio, get_task_status, submit_result_request, get_transcription
 from pprint import pformat
+from flask_cors import CORS
+
 load_dotenv()
 
 # FIXME: this needs to depend on user + date or some other thing.
 app = Flask(__name__)
-
+CORS(app)
 
 @app.route('/')
 def landing():

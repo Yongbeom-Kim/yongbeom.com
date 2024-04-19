@@ -4,6 +4,9 @@ backend_aws_iam_tfstate_file := ./terraform/upload_bucket/terraform.tfstate
 backend_aws_iam_access_key := $(shell terraform output -raw -state=$(backend_aws_iam_tfstate_file) backend_iam_access_key)
 backend_aws_iam_secret_key := $(shell terraform output -raw -state=$(backend_aws_iam_tfstate_file) backend_iam_secret_key)
 
+flask:
+	@ set -a && . ./.env.deploy && set +a && \
+		flask --app src.app:app run
 dev:
 	$(MAKE) docker_run
 

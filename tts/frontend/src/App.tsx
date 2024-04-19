@@ -10,6 +10,7 @@ import HeaderBar from "./component/HeaderBar/HeaderBar";
 import DescriptionBar from "./component/DescriptionBar/DescriptionBar";
 import FileUploadForm from "./component/FileUploadForm/FileUploadForm";
 import classNames from "classnames";
+import { clean_await } from "./utils/promise";
 
 type Status =
   | "INITIAL_STATUS"
@@ -27,6 +28,7 @@ function App() {
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
+  // TODO: convert to something testable.
   const onSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     setFile(null);
@@ -38,45 +40,52 @@ function App() {
       setErrorMessage("File must be of type audio/wav");
       return
     }
-    await upload_file_s3("test.wav", file).catch((e) => {
+
+    const [r, err] = await clean_await(upload_file_s3("test.wav", file));
+    if (r === null) {
       setStatus("ERROR");
-      setErrorMessage(`Something went wrong: ${e.message}`);
-    })
+      // @ts-expect-error error has any type, I can't do better than this.
+      setErrorMessage(`Something went wrong: ${err?.message ?? err}`);
+      return;
+    }
 
     setStatus("TRANSCRIBING");
     setMessage("Requesting File Transcription...");
-    const { success, job_id, error } = await request_transcribe_object(
-      "test.wav"
-    );
-    if (!success) {
+    const [job_id, error_msg] = await request_transcribe_object("test.wav");
+    if (job_id === null) { // Second part satisfies typescript check.
       setStatus("ERROR");
-      setErrorMessage(error);
+      setErrorMessage(error_msg);
+      return;
     }
 
     const interval = setInterval(async () => {
-      const { success, status, error } = await request_transcription_status(
+      const [status, error] = await request_transcription_status(
         job_id
       );
-      if (!success) {
+      if (status === null) {
+        clearInterval(interval);
         setStatus("ERROR");
         setErrorMessage(error);
       }
-      if (success && status === "COMPLETED") {
+      if (status === "COMPLETED") {
         clearInterval(interval);
-        get_transcription_text();
+        get_transcription_text(job_id);
       }
     }, 5000);
 
-    async function get_transcription_text() {
+
+    async function get_transcription_text(job_id: string) {
       setMessage("Transcription Completed; Retrieving Transcription Text...");
-      const { success, text, error } = await request_transcription_text(job_id);
-      if (!success) {
+      const [text, error] = await request_transcription_text(job_id);
+      if (error !== null) {
         setStatus("ERROR");
         setErrorMessage(error);
+        return
       }
       setStatus("COMPLETED");
       setTranscript(text);
     }
+
   };
 
   const [textareaValue, setTextareaValue] = useState("");
