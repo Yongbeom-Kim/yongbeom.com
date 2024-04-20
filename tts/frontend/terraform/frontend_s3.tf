@@ -63,4 +63,7 @@ resource "aws_s3_object" "object" {
   # Unless the bucket has encryption enabled, the ETag of each object is an
   # MD5 hash of that object.
   etag = each.value.digests.md5
+
+  # We need this depends_on to invalidate the cloudfront cache before uploading all aws s3 objects.
+  depends_on = [ null_resource.s3_cache_invalidation ]
 }

@@ -64,6 +64,18 @@ resource "aws_cloudfront_cache_policy" "caching_optimized" {
     }
 }
 
+# Cache invalidation on S3 upload
+resource "null_resource" "s3_cache_invalidation" {
+  for_each     = module.dir.files
+
+  provisioner "local-exec" {
+    command = "aws cloudfront create-invalidation --distribution-id ${aws_cloudfront_distribution.frontent_dist.id} --paths '/${each.key}'"
+  }
+  triggers = {
+    hash = each.value.digests.md5
+  }
+}
+
 
 ## SSL ACM Certificate
 
