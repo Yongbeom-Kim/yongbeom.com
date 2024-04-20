@@ -4,11 +4,15 @@ backend_aws_iam_tfstate_file := ./terraform/upload_bucket/terraform.tfstate
 backend_aws_iam_access_key := $(shell terraform output -raw -state=$(backend_aws_iam_tfstate_file) backend_iam_access_key)
 backend_aws_iam_secret_key := $(shell terraform output -raw -state=$(backend_aws_iam_tfstate_file) backend_iam_secret_key)
 
+ifeq "$(ENABLE_FLASK_CORS)" ""
+ENABLE_FLASK_CORS := 0
+endif
+
 flask:
 	@ set -a && . ./.env.deploy && set +a && \
 		flask --app src.app:app run
 dev:
-	$(MAKE) docker_run
+	ENABLE_FLASK_CORS=1 $(MAKE) docker_run
 
 test: 
 	COMMAND="pytest" $(MAKE) docker_run_cmd
@@ -27,7 +31,10 @@ docker_build:
 
 docker_run: docker_build
 	@ set -a && . ./.env.deploy && set +a && \
-		docker run -p 5000:8080 $${DOCKER_IMAGE_TAG}
+		docker run \
+			-p 5000:8080 \
+			--env ENABLE_FLASK_CORS=$(ENABLE_FLASK_CORS) \
+			$${DOCKER_IMAGE_TAG}
 
 docker_run_cmd: docker_build
 	@ set -a && . ./.env.deploy && set +a && \
