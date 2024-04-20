@@ -1,103 +1,61 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import {
-  request_transcribe_object,
-  request_transcription_status,
-  request_transcription_text,
-  upload_file_s3,
+  TranscriptObjectType,
+  request_transcription
 } from "./api/backend";
 import HeaderBar from "./component/HeaderBar/HeaderBar";
 import DescriptionBar from "./component/DescriptionBar/DescriptionBar";
 import FileUploadForm from "./component/FileUploadForm/FileUploadForm";
 import classNames from "classnames";
-import { clean_await } from "./utils/promise";
 
-type Status =
-  | "INITIAL_STATUS"
-  | "UPLOADING"
-  | "TRANSCRIBING"
-  | "COMPLETED"
-  | "ERROR";
 
 function App() {
   const [file, setFile] = useState<File | null>(null);
-  const [transcript, setTranscript] = useState<
-    { end: number; start: number; text: string }[]
-  >([]);
-  const [status, setStatus] = useState("INITIAL_STATUS" as Status);
+  const [transcript, setTranscript] = useState<TranscriptObjectType>([]);
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   // TODO: convert to something testable.
   const onSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
+    const upload_file = file;
     setFile(null);
+    setTranscript([]);
+    setErrorMessage("");
+    setMessage("");
 
-    setStatus("UPLOADING");
-    setMessage("Uploading file...");
-    if (file === null || file.type !== "audio/wav") {
-      setStatus("ERROR");
-      setErrorMessage("File must be of type audio/wav");
-      return
-    }
-
-    const [r, err] = await clean_await(upload_file_s3("test.wav", file));
-    if (r === null) {
-      setStatus("ERROR");
-      // @ts-expect-error error has any type, I can't do better than this.
-      setErrorMessage(`Something went wrong: ${err?.message ?? err}`);
+    if (!upload_file) {
       return;
     }
 
-    setStatus("TRANSCRIBING");
-    setMessage("Requesting File Transcription...");
-    const [job_id, error_msg] = await request_transcribe_object("test.wav");
-    if (job_id === null) { // Second part satisfies typescript check.
-      setStatus("ERROR");
-      setErrorMessage(error_msg);
-      return;
-    }
+    const it = await request_transcription(upload_file)
 
-    const interval = setInterval(async () => {
-      const [status, error] = await request_transcription_status(
-        job_id
-      );
-      if (status === null) {
-        clearInterval(interval);
-        setStatus("ERROR");
-        setErrorMessage(error);
+    for await (const [res, err] of it) {
+      if (res === null) {
+        setErrorMessage(err ?? ""); // This nullary will never happen since only one can be null.
+        return;
       }
-      if (status === "COMPLETED") {
-        clearInterval(interval);
-        get_transcription_text(job_id);
+      const { status, transcript } = res;
+      setMessage(status);
+      if (transcript !== null) {
+        setTranscript(transcript);
       }
-    }, 5000);
-
-
-    async function get_transcription_text(job_id: string) {
-      setMessage("Transcription Completed; Retrieving Transcription Text...");
-      const [text, error] = await request_transcription_text(job_id);
-      if (error !== null) {
-        setStatus("ERROR");
-        setErrorMessage(error);
-        return
-      }
-      setStatus("COMPLETED");
-      setTranscript(text);
     }
 
   };
 
   const [textareaValue, setTextareaValue] = useState("");
   useEffect(() => {
-    if (status === "COMPLETED") {
+    // console.log({transcript, errorMessage, message})
+    if (transcript.length !== 0) {
       setTextareaValue(transcript.map((t) => t.text.trim()).join("\n"));
-    } else if (status === "ERROR") {
+    } else if (errorMessage !== null && errorMessage !== "") {
       setTextareaValue(errorMessage);
     } else {
       setTextareaValue(message);
     }
-  }, [status, transcript, errorMessage, message]);
+  }, [transcript, errorMessage, message]);
 
   // TODO: Clean up textarea and classes, separate into its own component
   return (

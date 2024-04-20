@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import { shorten_file_name } from '../../src/utils/file_name_shortener';
 
 describe('test_file_name_shortener', () => {
