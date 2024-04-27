@@ -94,4 +94,4 @@ venv/
 terraform/
 
 # Environment variables for building
-.env.deploy
+.env.terraform
