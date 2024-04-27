@@ -23,6 +23,10 @@ s3 = session.resource('s3')
 bucket = s3.Bucket(bucket_name)
 
 
+def get_identity():
+    return boto3.client('sts').get_caller_identity()
+
+
 def upload_file(local_file_path: Path, bucket_file_key: str) -> List[str]:
     assert local_file_path.exists(), f"File not found: {local_file_path}"
     assert local_file_path.is_file(), f"Not a file: {local_file_path}"

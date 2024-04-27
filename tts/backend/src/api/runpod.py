@@ -1,8 +1,8 @@
 from typing import Dict, List, Literal, Tuple, TypedDict
+from typing_extensions import Unpack
 import os
 import requests
 
-Model = Literal["tiny", "base", "small", "medium", "large-v1", "large-v2"]
 JobStatus = Literal['IN_PROGRESS', 'COMPLETED', 'ERROR', 'IN_QUEUE', 'FAILED']
 Transcript = List[TypedDict(
     'TranscriptSegment', {'start': float, 'end': float, 'text': str})]
@@ -76,7 +76,38 @@ def get_transcription(result_request_response: requests.Response) -> Transcript 
     return transcript
 
 
-def submit_audio_request(wav_file_url: str, model_name: Model = 'base') -> requests.Response:
+SupportedLanguages = Literal['af', 'ar', 'hy', 'az', 'be', 'bs', 'bg', 'ca', 'zh', 'hr', 'cs',
+                             'da', 'nl', 'en', 'et', 'fi', 'fr', 'gl', 'de', 'el', 'he', 'hi',
+                             'hu', 'is', 'id', 'it', 'ja', 'kn', 'kk', 'ko', 'lv', 'lt', 'mk', 
+                             'ms', 'mr', 'mi', 'ne', 'no', 'fa', 'pl', 'pt', 'ro', 'ru', 'sr', 
+                             'sk', 'sl', 'es', 'sw', 'sv', 'tl', 'ta', 'th', 'tr', 'uk', 'ur', 
+                             'vi', 'cy']
+
+
+class AudioRequest(TypedDict):
+    model: Literal["tiny", "base", "small", "medium", "large-v1", "large-v2"] = 'base'
+    transcription: Literal['plain_text', 'srt', 'vtt'] = 'plain_text'
+    translate: bool = False  # translate to english
+    language: SupportedLanguages | None = None
+    temperature: float = 0
+    best_of: int = 5
+    beam_size: int = 5
+    patience: float = 1
+    suppress_tokens: str = '-1'
+    initial_prompt: str = ''
+    condition_on_previous_text: bool = False
+    temperature_increment_on_fallback: float = 0.2
+    compression_ratio_threshold: float = 2.4
+    logprob_threshold: float = -1
+    word_timestamps: bool = False
+    no_speech_threshold: float = 0.6
+
+
+def submit_audio_request(
+        wav_file_url: str,
+        enable_vad: bool = False,
+        **kwargs: Unpack[AudioRequest],
+) -> requests.Response:
     """Submit audio to Runpod whisper API for transcription.
 
     Args:
@@ -90,23 +121,9 @@ def submit_audio_request(wav_file_url: str, model_name: Model = 'base') -> reque
     payload = {
         "input": {
             "audio": wav_file_url,
-            "model": model_name,
-            "transcription": "plain_text",
-            "translate": False,
-            # "language": "en",
-            "temperature": 0,
-            "best_of": 5,
-            "beam_size": 5,
-            "patience": 1,
-            "suppress_tokens": "-1",
-            "condition_on_previous_text": False,
-            "temperature_increment_on_fallback": 0.2,
-            "compression_ratio_threshold": 2.4,
-            "logprob_threshold": -1,
-            "no_speech_threshold": 0.6,
-            "word_timestamps": False
+            **kwargs
         },
-        "enable_vad": False
+        "enable_vad": enable_vad
     }
 
     headers = {

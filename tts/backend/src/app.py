@@ -3,11 +3,12 @@ from dotenv import load_dotenv
 from flask import Flask, jsonify, request
 from src.api.aws_s3 import create_presigned_upload_url, create_presigned_download_url
 from src.api.runpod import (
+    AudioRequest,
     submit_audio_request,
     submit_audio,
     get_task_status,
     submit_result_request,
-    get_transcription
+    get_transcription,
 )
 # CORS handled by lambda.
 from flask_cors import CORS
@@ -25,7 +26,7 @@ if (os.getenv('ENABLE_FLASK_CORS') == '1'):
 
 @app.route('/')
 def landing():
-    return jsonify(message="Test, OK"), 200
+    return jsonify(message="Test, OKs"), 200
 
 
 @app.route('/get_presigned_upload_link', methods=['POST'])
@@ -42,9 +43,14 @@ def transcribe_object():
     download_url = create_presigned_download_url(s3_bucket_object_key)
     if download_url is None:
         return jsonify(message="No file found"), 404
-
+    
+    audio_request_object = {'wav_file_url': download_url, 'enable_vad': False}
+    for key in AudioRequest.keys():
+        if key in request.json:
+            audio_request_object[key] = request.json[key]
+    
     success, job_id, error = submit_audio(
-        submit_audio_request(download_url, 'large-v2'),)
+        submit_audio_request(**audio_request_object),)
     if not success:
         return jsonify(message=error), 500
 
@@ -78,3 +84,4 @@ def get_transcription_endpoint():
         return jsonify(message="Something went wrong"), 400
 
     return jsonify(transcription=transcription), 200
+
