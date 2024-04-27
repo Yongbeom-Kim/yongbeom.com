@@ -26,12 +26,12 @@ data "archive_file" "src" {
 resource "null_resource" "docker_build_and_push" {
     provisioner "local-exec" {
         command = "make docker_push"
-        working_dir = "${path.module}/../.." # This is the root of the project.
+        working_dir = "${path.module}/.." # This is the root of the project.
     }
 
     provisioner "local-exec" {
         command = "rm ./src.zip"
-        working_dir = "${path.module}/../.." # This is the root of the project.
+        working_dir = "${path.module}/.." # This is the root of the project.
     }
 
     triggers = {
