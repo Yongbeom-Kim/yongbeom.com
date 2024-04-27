@@ -75,7 +75,6 @@ plan:
 apply:
 	DIR=terraform/lambda_ecr TF_ACTION="apply -auto-approve" $(MAKE) tf
 	DIR=terraform/upload_bucket TF_ACTION="apply -auto-approve" $(MAKE) tf
-	$(MAKE) docker_push
 	DIR=terraform TF_ACTION="apply -auto-approve" $(MAKE) tf
 
 destroy:
