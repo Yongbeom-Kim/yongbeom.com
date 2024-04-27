@@ -2,10 +2,11 @@ import axios from "axios";
 import { PromiseResult, clean_await } from "../utils/promise";
 
 const BACKEND_PATH = import.meta.env.VITE_BACKEND_ROUTE;
+axios.defaults.baseURL = BACKEND_PATH;
 
 const get_s3_presigned_upload_link = async (s3_bucket_object_key: string) => {
   // FIXME: handle error
-  const res = await axios.post(`${BACKEND_PATH}/get_presigned_upload_link`, {
+  const res = await axios.post(`/get_presigned_upload_link`, {
     s3_bucket_object_key: s3_bucket_object_key,
   });
   return {
@@ -44,7 +45,7 @@ export const request_transcribe_object: (
 ) => Promise<PromiseResult<string, string>> = async (
   s3_bucket_object_key: string
 ) => {
-  const res = await axios.post(`${BACKEND_PATH}/transcribe_object`, {
+  const res = await axios.post(`/transcribe_object`, {
     s3_bucket_object_key: s3_bucket_object_key,
   });
   switch (res.status) {
@@ -65,7 +66,7 @@ export const request_transcribe_object: (
 export const request_transcription_status: (
   job_id: string
 ) => Promise<PromiseResult<string, string>> = async (job_id: string) => {
-  const res = await axios.get(`${BACKEND_PATH}/get_transcription_status`, {
+  const res = await axios.get(`/get_transcription_status`, {
     params: { job_id: job_id },
   });
 
@@ -87,7 +88,7 @@ export const request_transcription_text: (
 ) => Promise<
   PromiseResult<{ end: number; start: number; text: string }[], string>
 > = async (job_id: string) => {
-  const res = await axios.get(`${BACKEND_PATH}/get_transcription`, {
+  const res = await axios.get(`/get_transcription`, {
     params: { job_id: job_id },
   });
 
