@@ -2,10 +2,6 @@ variable "backend_lambda_function_name" {
   type = string
 }
 
-variable "backend_lambda_container_digest" {
-  type = string
-}
-
 variable "backend_lambda_image_uri" {
   type = string
 }
@@ -57,7 +53,7 @@ resource "aws_lambda_function" "backend" {
   package_type = "Image"
   image_uri    = "${var.backend_lambda_image_uri}:latest"
 
-  source_code_hash = var.backend_lambda_container_digest
+  source_code_hash = docker_registry_image.backend_image.sha256_digest
 }
 
 resource "aws_lambda_function_url" "backend_url" {

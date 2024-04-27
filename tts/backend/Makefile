@@ -52,34 +52,24 @@ docker_push: docker_login docker_build
 	@ set -a && . ./.env.deploy && set +a && \
 		docker push $${DOCKER_IMAGE_TAG}
 
-docker_image_digest = $(shell set -a && . ./.env.deploy && set +a && docker inspect $${DOCKER_IMAGE_TAG} | jq ".[0].Id")
 
 ## Terraform
 
 tf:
 	@ set -a && . ./.env.deploy && set +a && \
-		export TF_VAR_backend_lambda_container_digest=$(docker_image_digest) && \
 		cd $(DIR) && \
 		terraform $(TF_ACTION)
 
 init:
-	DIR=terraform/lambda_ecr TF_ACTION=init $(MAKE) tf
-	DIR=terraform/upload_bucket TF_ACTION=init $(MAKE) tf
 	DIR=terraform TF_ACTION=init $(MAKE) tf
 
 plan:
-	DIR=terraform/lambda_ecr TF_ACTION=plan $(MAKE) tf
-	DIR=terraform/upload_bucket TF_ACTION=plan $(MAKE) tf
 	DIR=terraform TF_ACTION=plan $(MAKE) tf
 
 apply:
-	DIR=terraform/lambda_ecr TF_ACTION="apply -auto-approve" $(MAKE) tf
-	DIR=terraform/upload_bucket TF_ACTION="apply -auto-approve" $(MAKE) tf
-	DIR=terraform TF_ACTION="apply -auto-approve" $(MAKE) tf
+	DIR=terraform TF_ACTION="apply" $(MAKE) tf
 
 destroy:
-	DIR=terraform/lambda_ecr TF_ACTION="destroy -auto-approve" $(MAKE) tf
-	DIR=terraform/upload_bucket TF_ACTION="destroy -auto-approve" $(MAKE) tf
 	DIR=terraform TF_ACTION="destroy -auto-approve" $(MAKE) tf
 
 ## Utils

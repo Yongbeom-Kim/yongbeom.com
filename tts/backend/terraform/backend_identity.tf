@@ -35,19 +35,19 @@ data "aws_iam_policy_document" "s3_upload_policy" {
 }
 
 resource "aws_iam_access_key" "backend_user" {
-    user = aws_iam_user.backend_user.name
+  user = aws_iam_user.backend_user.name
 }
 
 output "backend_iam_arn" {
-    value = aws_iam_user.backend_user.arn
+  value = aws_iam_user.backend_user.arn
 }
 
 output "backend_iam_access_key" {
-    value = aws_iam_access_key.backend_user.id
-    sensitive = true
+  value     = aws_iam_access_key.backend_user.id
+  sensitive = true
 }
 
 output "backend_iam_secret_key" {
-    value = aws_iam_access_key.backend_user.secret
-    sensitive = true
+  value     = aws_iam_access_key.backend_user.secret
+  sensitive = true
 }

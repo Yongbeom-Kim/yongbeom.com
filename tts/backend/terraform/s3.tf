@@ -40,7 +40,7 @@ data "aws_iam_policy_document" "allow_access_from_iam_account" {
 
     principals {
       type        = "AWS"
-      identifiers = [ aws_iam_user.backend_user.arn ]
+      identifiers = [aws_iam_user.backend_user.arn]
     }
 
     actions = [
