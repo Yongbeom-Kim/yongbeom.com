@@ -1,9 +1,5 @@
 .PHONY: test
 
-backend_aws_iam_tfstate_file := ./terraform/upload_bucket/terraform.tfstate
-backend_aws_iam_access_key := $(shell terraform output -raw -state=$(backend_aws_iam_tfstate_file) backend_iam_access_key)
-backend_aws_iam_secret_key := $(shell terraform output -raw -state=$(backend_aws_iam_tfstate_file) backend_iam_secret_key)
-
 ifeq "$(ENABLE_FLASK_CORS)" ""
 ENABLE_FLASK_CORS := 0
 endif
@@ -20,14 +16,15 @@ test:
 ## Docker
 
 docker_build:
-	@ set -a && . ./.env.deploy && set +a && \
-		pip freeze > requirements.txt && \
-		docker build \
-				-t $${DOCKER_IMAGE_TAG} \
-				-f lambda.Dockerfile \
-				--build-arg="aws_public_key=$(backend_aws_iam_access_key)" \
-				--build-arg="aws_secret_key=$(backend_aws_iam_secret_key)" \
-				.
+	DIR=terraform TF_ACTION="apply -target=docker_image.backend_image -auto-approve" $(MAKE) tf
+	# @ set -a && . ./.env.deploy && set +a && \
+	# 	pip freeze > requirements.txt && \
+	# 	docker build \
+	# 			-t $${DOCKER_IMAGE_TAG} \
+	# 			-f lambda.Dockerfile \
+	# 			--build-arg="aws_public_key=$(backend_aws_iam_access_key)" \
+	# 			--build-arg="aws_secret_key=$(backend_aws_iam_secret_key)" \
+	# 			.
 
 docker_run: docker_build
 	@ set -a && . ./.env.deploy && set +a && \
