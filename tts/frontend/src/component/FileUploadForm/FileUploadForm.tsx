@@ -3,6 +3,7 @@ import { AudioFileIcon } from "../Icons/AudioFileIcon";
 import { shorten_file_name } from "../../utils/file_name_shortener";
 import { useState, useEffect } from "react";
 import { TranscriptObjectType, request_transcription } from "../../api/backend";
+import sha256 from 'crypto-js/sha256';
 
 type FileUploadFormProps = React.HTMLAttributes<HTMLFormElement>;
 
@@ -31,8 +32,8 @@ const FileUploadForm: React.FC<FileUploadFormProps> = ({
     if (!upload_file) {
       return;
     }
-
-    const it = await request_transcription(upload_file);
+    
+    const it = await request_transcription(upload_file, sha256(await upload_file.text()).toString() + '.wav');
 
     for await (const [res, err] of it) {
       if (res === null) {

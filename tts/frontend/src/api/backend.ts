@@ -114,7 +114,6 @@ export type TranscriptObjectType = { end: number; start: number; text: string }[
 
 export async function* request_transcription(
   audio_file: File,
-  audio_file_type: string = "audio/wav",
   s3_upload_object_key = "test.wav",
   request_polling_interval = 5000, //miliseconds
 ): AsyncGenerator<
@@ -122,7 +121,7 @@ export async function* request_transcription(
 > {
   console.log({BACKEND_PATH})
   yield [{ status: "UPLOADING", transcript: null }, null];
-  if (audio_file === null || audio_file.type !== audio_file_type) {
+  if (audio_file === null || audio_file.type !== 'audio/wav') {
     yield [null, "Invalid file type"];
     return;
   }
@@ -141,7 +140,7 @@ export async function* request_transcription(
 
   yield [{ status: "TRANSCRIBING", transcript: null }, null];
 
-  [res, err] = await request_transcribe_object("test.wav");
+  [res, err] = await request_transcribe_object(s3_upload_object_key);
   const job_id = res;
   if (job_id === null) {
     yield [

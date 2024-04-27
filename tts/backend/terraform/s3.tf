@@ -56,3 +56,15 @@ data "aws_iam_policy_document" "allow_access_from_iam_account" {
     ]
   }
 }
+
+resource "aws_s3_bucket_lifecycle_configuration" "upload_bucket" {
+  bucket = aws_s3_bucket.upload_bucket.id
+
+  rule {
+    id = "delete-objects-after-7-days"
+    expiration {
+      days = 7
+    }
+    status = "Enabled"
+  }
+}
