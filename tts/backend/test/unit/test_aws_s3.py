@@ -17,7 +17,7 @@ load_dotenv()
 
 @pytest.fixture
 def test_file():
-    item_path = Path('test/audio/audio_gettysburg.wav')
+    item_path = Path('test/audio/gettysburg.wav')
     item_key = 'this-is-a-test-file-without-key-collisions.wav'
     assert item_path.exists()
     assert item_path.is_file()
@@ -43,7 +43,7 @@ def test_bucket_exists():
 def test_upload_and_delete_file():
     # Super bad test, but it's fine...
     # If this test fails halfway, we are left with a dangling file in the bucket
-    item_path = Path('test/audio/audio_gettysburg.wav')
+    item_path = Path('test/audio/gettysburg.wav')
     item_key = 'this-is-a-test-file-without-key-collisions.wav'
     assert item_path.exists()
     assert item_path.is_file()
@@ -71,7 +71,7 @@ def test_create_presigned_download_url(test_file):
 @pytest.mark.slow
 @pytest.mark.s3
 def test_create_presigned_upload_url():
-    item_path = Path('test/audio/audio_gettysburg.wav')
+    item_path = Path('test/audio/gettysburg.wav')
     item_key = 'this-is-a-test-file-without-key-collisions.wav'
     url_obj = create_presigned_upload_url(object_name=item_key)
     assert url_obj is not None

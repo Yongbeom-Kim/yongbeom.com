@@ -44,15 +44,16 @@ def transcribe_object():
     if download_url is None:
         return jsonify(message="No file found"), 404
     
-    audio_request_object = {'wav_file_url': download_url, 'enable_vad': False}
-    for key in AudioRequest.keys():
-        if key in request.json:
-            audio_request_object[key] = request.json[key]
+    audio_request_object = AudioRequest.add_defaults(**request.json)
     
     success, job_id, error = submit_audio(
-        submit_audio_request(**audio_request_object),)
+        submit_audio_request(
+            wav_file_url=download_url,
+            enable_vad=False,
+            **audio_request_object),
+    )
     if not success:
-        return jsonify(message=error), 500
+        return jsonify(message=error), 502
 
     return jsonify(job_id=job_id), 200
 

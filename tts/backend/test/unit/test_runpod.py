@@ -7,13 +7,13 @@ from src.api.runpod import (
     submit_audio_request,
     submit_result_request,
 )
-from test.runpod_response import (
+from test.unit.runpod_response import (
     status_response_error,
     status_response_in_progress,
     status_response_complete,
 )
 
-from test.utils import create_http_response
+from test.unit.utils import create_http_response
 
 sample_audio_url = 'https://github.com/runpod-workers/sample-inputs/raw/main/audio/gettysburg.wav'
 

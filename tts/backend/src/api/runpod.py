@@ -1,3 +1,4 @@
+from __future__ import annotations
 from typing import Dict, List, Literal, Tuple, TypedDict
 from typing_extensions import Unpack
 import os
@@ -8,6 +9,7 @@ Transcript = List[TypedDict(
     'TranscriptSegment', {'start': float, 'end': float, 'text': str})]
 
 RUNPOD_API_KEY = os.getenv("RUNPOD_API_KEY")
+RUNPOD_API_URL = os.getenv("RUNPOD_API_URL")
 
 
 def submit_audio(audio_request_response: requests.Response) -> Tuple[bool, str, str]:
@@ -78,14 +80,15 @@ def get_transcription(result_request_response: requests.Response) -> Transcript 
 
 SupportedLanguages = Literal['af', 'ar', 'hy', 'az', 'be', 'bs', 'bg', 'ca', 'zh', 'hr', 'cs',
                              'da', 'nl', 'en', 'et', 'fi', 'fr', 'gl', 'de', 'el', 'he', 'hi',
-                             'hu', 'is', 'id', 'it', 'ja', 'kn', 'kk', 'ko', 'lv', 'lt', 'mk', 
-                             'ms', 'mr', 'mi', 'ne', 'no', 'fa', 'pl', 'pt', 'ro', 'ru', 'sr', 
-                             'sk', 'sl', 'es', 'sw', 'sv', 'tl', 'ta', 'th', 'tr', 'uk', 'ur', 
+                             'hu', 'is', 'id', 'it', 'ja', 'kn', 'kk', 'ko', 'lv', 'lt', 'mk',
+                             'ms', 'mr', 'mi', 'ne', 'no', 'fa', 'pl', 'pt', 'ro', 'ru', 'sr',
+                             'sk', 'sl', 'es', 'sw', 'sv', 'tl', 'ta', 'th', 'tr', 'uk', 'ur',
                              'vi', 'cy']
 
 
 class AudioRequest(TypedDict):
-    model: Literal["tiny", "base", "small", "medium", "large-v1", "large-v2"] = 'base'
+    model: Literal["tiny", "base", "small",
+                   "medium", "large-v1", "large-v2"] = 'base'
     transcription: Literal['plain_text', 'srt', 'vtt'] = 'plain_text'
     translate: bool = False  # translate to english
     language: SupportedLanguages | None = None
@@ -102,6 +105,28 @@ class AudioRequest(TypedDict):
     word_timestamps: bool = False
     no_speech_threshold: float = 0.6
 
+    @classmethod
+    def add_defaults(cls, **kwargs: Unpack[AudioRequest]) -> AudioRequest:
+        """Add default values to the audio request. Removes any extra keys."""
+        return ({
+            'model': kwargs.get('model', 'base'),
+            'transcription': kwargs.get('transcription', 'plain_text'),
+            'translate': kwargs.get('translate', False),
+            'language': kwargs.get('language', None),
+            'temperature': kwargs.get('temperature', 0),
+            'best_of': kwargs.get('best_of', 5),
+            'beam_size': kwargs.get('beam_size', 5),
+            'patience': kwargs.get('patience', 1),
+            'suppress_tokens': kwargs.get('suppress_tokens', '-1'),
+            'initial_prompt': kwargs.get('initial_prompt', ''),
+            'condition_on_previous_text': kwargs.get('condition_on_previous_text', False),
+            'temperature_increment_on_fallback': kwargs.get('temperature_increment_on_fallback', 0.2),
+            'compression_ratio_threshold': kwargs.get('compression_ratio_threshold', 2.4),
+            'logprob_threshold': kwargs.get('logprob_threshold', -1),
+            'word_timestamps': kwargs.get('word_timestamps', False),
+            'no_speech_threshold': kwargs.get('no_speech_threshold', 0.6),
+        })
+
 
 def submit_audio_request(
         wav_file_url: str,
@@ -117,7 +142,9 @@ def submit_audio_request(
     Returns:
         requests.Response: The response from the API.
     """
-    url = "https://api.runpod.ai/v2/faster-whisper/run"
+    # url = "https://api.runpod.ai/v2/faster-whisper/run"
+    url =  f"{RUNPOD_API_URL}/run"
+    print('kwargs', kwargs)
     payload = {
         "input": {
             "audio": wav_file_url,
@@ -145,7 +172,7 @@ def submit_result_request(job_id: str) -> requests.Response:
         requests.Response: The response from the API.
 
     """
-    url = f"https://api.runpod.ai/v2/faster-whisper/status/{job_id}"
+    url =  f"{RUNPOD_API_URL}/status/{job_id}"
 
     headers = {
         "accept": "application/json",
