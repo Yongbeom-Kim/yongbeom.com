@@ -18,7 +18,7 @@ build:
 # 	@ set -a && . ./.env.production && set +a && \
 # 	yarn vitest run
 
-test_dev:
+test:
 	@ set -a && . ./.env.development && set +a && \
 	yarn vitest run
 

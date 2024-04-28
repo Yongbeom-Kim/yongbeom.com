@@ -1,20 +1,10 @@
 import axios from "axios";
 import { PromiseResult, clean_await } from "../utils/promise";
-import {} from 'frontend_service'
-
+import { set_backend_path } from 'frontend_tts_lib'
+import { get_s3_presigned_upload_link } from 'frontend_tts_lib/endpoints'
 const BACKEND_PATH = import.meta.env.VITE_BACKEND_ROUTE;
 axios.defaults.baseURL = BACKEND_PATH;
-
-const get_s3_presigned_upload_link = async (s3_bucket_object_key: string) => {
-  // FIXME: handle error
-  const res = await axios.post(`/get_presigned_upload_link`, {
-    s3_bucket_object_key: s3_bucket_object_key,
-  });
-  return {
-    url: res.data["url_data"]["url"],
-    fields: res.data["url_data"]["fields"],
-  };
-};
+set_backend_path(BACKEND_PATH)
 
 const upload_file_from_s3_presigned_link = async (
   url: string,
