@@ -106,7 +106,7 @@ class AudioRequest(TypedDict):
     no_speech_threshold: float = 0.6
 
     @classmethod
-    def add_defaults(cls, **kwargs: Unpack[AudioRequest]) -> AudioRequest:
+    def from_kwargs(cls, **kwargs: any) -> AudioRequest:
         """Add default values to the audio request. Removes any extra keys."""
         return ({
             'model': kwargs.get('model', 'base'),

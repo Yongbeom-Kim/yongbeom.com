@@ -36,13 +36,18 @@ def get_presigned_upload_link():
     return jsonify(url_data=url_data), 200
 
 
+@app.route('/get_presigned_download_link', methods=['POST'])
+def get_presigned_download_link():
+    s3_bucket_object_key = request.json.get('s3_bucket_object_key')
+    url_data = create_presigned_download_url(s3_bucket_object_key)
+    return jsonify(url_data=url_data), 200
+
+
 @app.route('/transcribe_object', methods=['POST'])
 def transcribe_object():
-    s3_bucket_object_key = request.json.get('s3_bucket_object_key')
-
-    download_url = create_presigned_download_url(s3_bucket_object_key)
+    download_url = request.json.get('audio_download_url')
     if download_url is None:
-        return jsonify(message="No file found"), 404
+        return jsonify(message="No download url found"), 404
     
     audio_request_object = AudioRequest.add_defaults(**request.json)
     
