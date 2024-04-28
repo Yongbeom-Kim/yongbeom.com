@@ -1,98 +1,15 @@
 import axios from "axios";
 import { PromiseResult, clean_await } from "../utils/promise";
-import { set_backend_path } from 'frontend_tts_lib'
-import { get_s3_presigned_upload_link } from 'frontend_tts_lib/endpoints'
+import { set_backend_path } from "frontend_tts_lib";
+import {
+  request_transcribe_object,
+  request_transcription_status,
+  request_transcription_text,
+  upload_file_s3,
+} from "frontend_tts_lib/endpoints";
 const BACKEND_PATH = import.meta.env.VITE_BACKEND_ROUTE;
 axios.defaults.baseURL = BACKEND_PATH;
-set_backend_path(BACKEND_PATH)
-
-const upload_file_from_s3_presigned_link = async (
-  url: string,
-  fields: { [key: string]: string },
-  file: File
-) => {
-  const formData = new FormData();
-  Object.entries(fields).forEach((e) => {
-    formData.append(e[0], e[1]);
-  });
-
-  // const file_text = (await file.arrayBuffer());
-  formData.append("file", file);
-  return axios.post(url, formData);
-};
-
-export const upload_file_s3 = async (
-  s3_bucket_object_key: string,
-  file: File
-) => {
-  const { url, fields } = await get_s3_presigned_upload_link(
-    s3_bucket_object_key
-  );
-  return await upload_file_from_s3_presigned_link(url, fields, file);
-};
-
-export const request_transcribe_object: (
-  s3_bucket_object_key: string
-) => Promise<PromiseResult<string, string>> = async (
-  s3_bucket_object_key: string
-) => {
-  const res = await axios.post(`/transcribe_object`, {
-    s3_bucket_object_key: s3_bucket_object_key,
-  });
-  switch (res.status) {
-    case 200:
-      return [res.data["job_id"], null];
-    case 404:
-      return [null, "File not found"];
-    case 500:
-      return [null, res.data["message"]];
-    default:
-      return [
-        null,
-        `Unknown error, status code: ${res.status}, message: ${res.data["message"]}`,
-      ];
-  }
-};
-
-export const request_transcription_status: (
-  job_id: string
-) => Promise<PromiseResult<string, string>> = async (job_id: string) => {
-  const res = await axios.get(`/get_transcription_status`, {
-    params: { job_id: job_id },
-  });
-
-  switch (res.status) {
-    case 200:
-      return [res.data["status"], null];
-    case 500:
-      return [null, res.data["message"]];
-    default:
-      return [
-        null,
-        `Unknown error, status code: ${res.status}, message: ${res.data["message"]}`,
-      ];
-  }
-};
-
-export const request_transcription_text: (
-  job_id: string
-) => Promise<
-  PromiseResult<{ end: number; start: number; text: string }[], string>
-> = async (job_id: string) => {
-  const res = await axios.get(`/get_transcription`, {
-    params: { job_id: job_id },
-  });
-
-  switch (res.status) {
-    case 200:
-      return [res.data["transcription"], null];
-    default:
-      return [
-        null,
-        `Unknown error, status code: ${res.status}, message: ${res.data["message"]}`,
-      ];
-  }
-};
+set_backend_path(BACKEND_PATH);
 
 export type TranscriptionStatus =
   | "INITIAL_STATUS"
@@ -101,18 +18,25 @@ export type TranscriptionStatus =
   | "COMPLETED"
   | "ERROR";
 
-export type TranscriptObjectType = { end: number; start: number; text: string }[];
+export type TranscriptObjectType = {
+  end: number;
+  start: number;
+  text: string;
+}[];
 
 export async function* request_transcription(
   audio_file: File,
   s3_upload_object_key = "test.wav",
-  request_polling_interval = 5000, //miliseconds
+  request_polling_interval = 5000 //miliseconds
 ): AsyncGenerator<
-  PromiseResult<{ status: TranscriptionStatus; transcript: TranscriptObjectType | null }, string>
+  PromiseResult<
+    { status: TranscriptionStatus; transcript: TranscriptObjectType | null },
+    string
+  >
 > {
-  console.log({BACKEND_PATH})
+  console.log({ BACKEND_PATH });
   yield [{ status: "UPLOADING", transcript: null }, null];
-  if (audio_file === null || audio_file.type !== 'audio/wav') {
+  if (audio_file === null || audio_file.type !== "audio/wav") {
     yield [null, "Invalid file type"];
     return;
   }
@@ -174,7 +98,7 @@ export async function* request_transcription(
     yield [
       {
         status: "COMPLETED",
-        transcript
+        transcript,
       },
       null,
     ];
