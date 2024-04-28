@@ -81,10 +81,9 @@ export const wait_until_transcription_completed = async function (
   queryInterval: Milliseconds = 500,
   onProgress: (progress: TranscriptionStatus) => void = () => {}
 ): Promise<PromiseResult<void, string>> {
-  let interval: number;
   const [error, error_msg] = await new Promise<[boolean, string]>(
     (resolve) => {
-      interval = setInterval(async () => {
+      const interval = setInterval(async () => {
         const [status, status_error] = await request_transcription_status(
           job_id
         );
