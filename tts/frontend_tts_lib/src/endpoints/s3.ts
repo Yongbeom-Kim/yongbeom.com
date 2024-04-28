@@ -40,3 +40,23 @@ export const upload_file_from_s3_presigned_link = async function (
     return [null, format_axios_error(e)];
   }
 };
+
+
+export const get_s3_presigned_download_link = async function (
+  s3_bucket_object_key: string
+): Promise<
+  PromiseResult<string, string>
+> {
+  try {
+    const res = await axios.post(`/get_presigned_download_link`, {
+      s3_bucket_object_key: s3_bucket_object_key,
+      validateStatus: (status) => status === 200,
+    });
+    const url = res.data["url_data"];
+    return [url, null];
+  } catch (e: unknown) {
+    if (!(e instanceof AxiosError)) throw e;
+
+    return [null, format_axios_error(e)];
+  }
+};
