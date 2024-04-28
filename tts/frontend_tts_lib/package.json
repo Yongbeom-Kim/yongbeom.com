@@ -2,14 +2,9 @@
   "name": "frontend_tts_lib",
   "version": "1.0.0",
   "description": "",
-  "main": ".",
   "exports": {
-    ".": {
-      "import": "./src/index.ts"
-    },
-    "./*": {
-      "import": "./src/*.ts"
-    }
+    "./*": "./src/*/index.ts",
+    ".": "./src/index.ts"
   },
   "scripts": {
     "test": "jest"
