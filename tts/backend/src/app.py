@@ -43,13 +43,13 @@ def get_presigned_download_link():
     return jsonify(url_data=url_data), 200
 
 
-@app.route('/transcribe_object', methods=['POST'])
-def transcribe_object():
+@app.route('/transcribe_audio', methods=['POST'])
+def transcribe_audio():
     download_url = request.json.get('audio_download_url')
     if download_url is None:
         return jsonify(message="No download url found"), 404
     
-    audio_request_object = AudioRequest.add_defaults(**request.json)
+    audio_request_object = AudioRequest.from_kwargs(**request.json)
     
     success, job_id, error = submit_audio(
         submit_audio_request(

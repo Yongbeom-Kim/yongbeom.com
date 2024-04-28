@@ -1,15 +1,15 @@
-import axios from "axios";
-import { clean_await, PromiseResult } from "../utils/utils";
+import { PromiseResult } from "../utils/utils";
+import { create_transcription_job, Milliseconds, ModelType, request_transcription_text, TranscriptionStatus, TranscriptObjectType, wait_until_transcription_completed } from "./runpod";
 import {
   get_s3_presigned_upload_link,
   upload_file_from_s3_presigned_link,
 } from "./s3";
 
-export type UPLOAD_STATE = "GETTING_LINK" | "UPLOADING" | "UPLOADED";
+export type UploadStatus = "GETTING_LINK" | "UPLOADING" | "UPLOADED";
 export const upload_file_s3 = async function (
   s3_bucket_object_key: string,
   file: File,
-  onProgress: (progress: UPLOAD_STATE) => void = (() => {})
+  onProgress: (progress: UploadStatus) => void = (() => {})
 ): Promise<PromiseResult<null, string>> {
 
   onProgress("GETTING_LINK");
@@ -35,3 +35,27 @@ export const upload_file_s3 = async function (
   return [null, null];
 };
 
+
+export const transcribe_audio = async function (
+  audio_download_url: string,
+  model: ModelType = "base",
+  onProgress: (progress: TranscriptionStatus) => void = (() => {}),
+  queryInterval: Milliseconds = 1000
+): Promise<PromiseResult<TranscriptObjectType[], string>> {
+  const [job_id, job_error] = await create_transcription_job(
+    audio_download_url,
+    model
+  );
+  if (job_error) {
+    return [null, `Error during creating transcription job: ${job_error}`];
+  }
+  onProgress("IN_PROGRESS");
+  
+  await wait_until_transcription_completed(job_id!, queryInterval, onProgress);
+
+  const [trans_obj, trans_obj_err] = await request_transcription_text(job_id!)
+  if (trans_obj_err) {
+    return [null, `Error during getting transcription: ${trans_obj_err}`];
+  }
+  return [trans_obj!, null];
+}
