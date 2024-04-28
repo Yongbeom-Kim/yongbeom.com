@@ -1,5 +1,6 @@
 import axios from "axios";
 import { PromiseResult, clean_await } from "../utils/promise";
+import {} from 'frontend_service'
 
 const BACKEND_PATH = import.meta.env.VITE_BACKEND_ROUTE;
 axios.defaults.baseURL = BACKEND_PATH;
