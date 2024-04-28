@@ -1,16 +1,35 @@
 import { PromiseResult } from "../utils/utils";
 import { create_transcription_job, Milliseconds, ModelType, request_transcription_text, TranscriptionStatus, TranscriptObjectType, wait_until_transcription_completed } from "./runpod";
 import {
+  get_s3_presigned_download_link,
   get_s3_presigned_upload_link,
   upload_file_from_s3_presigned_link,
+  UploadStatus,
 } from "./s3";
 
-export type UploadStatus = "GETTING_LINK" | "UPLOADING" | "UPLOADED";
+export type {
+  TranscriptionStatus as RunpodTranscriptionStatus,
+  ModelType as RunpodModelType,
+  TranscriptObjectType as RunpodTranscriptObject
+} from './runpod'
+
+export type {
+  UploadStatus as S3UploadStatus,
+} from './s3'
+
+
+/** 
+ * Uploads a file to s3 and returns the download link
+ * @param s3_bucket_object_key The key for the object in s3 bucket
+ * @param file The file to upload
+ * @param onProgress A callback function that will be called with the progress of the upload
+ * @returns PromiseResult<string, string> A tuple containing the download link or an error message
+ */
 export const upload_file_s3 = async function (
   s3_bucket_object_key: string,
   file: File,
   onProgress: (progress: UploadStatus) => void = (() => {})
-): Promise<PromiseResult<null, string>> {
+): Promise<PromiseResult<string, string>> {
 
   onProgress("GETTING_LINK");
   const [link_result, link_error] = await get_s3_presigned_upload_link(
@@ -30,9 +49,9 @@ export const upload_file_s3 = async function (
   if (upload_error) {
     return [null, `Error during uploading file to s3: ${upload_error}`];
   }
-
   onProgress("UPLOADED");
-  return [null, null];
+
+  return await get_s3_presigned_download_link(s3_bucket_object_key);
 };
 
 

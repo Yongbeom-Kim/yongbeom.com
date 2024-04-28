@@ -21,14 +21,13 @@ export const create_transcription_job = async function (
   model: ModelType = "base"
 ): Promise<PromiseResult<string, string>> {
   try {
-    await Promise.resolve(process.nextTick(Boolean));
     const res = await axios.post(
       `/transcribe_audio`,
       {
         audio_download_url,
         model,
       },
-      { validateStatus: (status) => status === 200 }
+      { validateStatus: (status: number) => status === 200 }
     );
     return [res.data["job_id"], null];
   } catch (e: unknown) {
@@ -41,10 +40,9 @@ const request_transcription_status = async function (
   job_id: string
 ): Promise<PromiseResult<TranscriptionStatus, string>> {
   try {
-    await Promise.resolve(process.nextTick(Boolean));
     const res = await axios.get(`/get_transcription_status`, {
       params: { job_id: job_id },
-      validateStatus: (status) => status === 200,
+      validateStatus: (status: number) => status === 200,
     });
     return [res.data["status"], null];
   } catch (e: unknown) {
@@ -65,10 +63,9 @@ export const request_transcription_text: (
   job_id: string
 ) => {
   try {
-    await Promise.resolve(process.nextTick(Boolean));
     const res = await axios.get(`/get_transcription`, {
       params: { job_id: job_id },
-      validateStatus: (status) => status === 200,
+      validateStatus: (status: number) => status === 200,
     });
     return [res.data["transcription"], null];
   } catch (e: unknown) {
@@ -82,16 +79,16 @@ export type Milliseconds = number;
 export const wait_until_transcription_completed = async function (
   job_id: string,
   queryInterval: Milliseconds = 500,
-  onProgress: (progress: TranscriptionStatus) => void = (() => {})
+  onProgress: (progress: TranscriptionStatus) => void = () => {}
 ): Promise<PromiseResult<void, string>> {
-  let interval;
+  let interval: number;
   const [error, error_msg] = await new Promise<[boolean, string]>(
-    (resolve, reject) => {
+    (resolve) => {
       interval = setInterval(async () => {
         const [status, status_error] = await request_transcription_status(
           job_id
         );
-        onProgress(status);
+        onProgress(status ?? "FAILED");
         if (status === "FAILED" || status_error) {
           clearInterval(interval);
           resolve([true, status_error ?? "Transcription failed."]);
@@ -103,7 +100,6 @@ export const wait_until_transcription_completed = async function (
       }, queryInterval);
     }
   );
-  clearInterval(interval);
   if (error) {
     return [null, error_msg];
   }

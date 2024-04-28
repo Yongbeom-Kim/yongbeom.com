@@ -1,16 +1,17 @@
 import axios, { AxiosError } from "axios";
 import { format_axios_error, PromiseResult } from "../utils/utils";
 
+export type UploadStatus = "GETTING_LINK" | "UPLOADING" | "UPLOADED";
+
 export const get_s3_presigned_upload_link = async function (
   s3_bucket_object_key: string
 ): Promise<
   PromiseResult<{ url: string; fields: { [key: string]: string } }, string>
 > {
   try {
-    await Promise.resolve(process.nextTick(Boolean));
     const res = await axios.post(`/get_presigned_upload_link`, {
       s3_bucket_object_key: s3_bucket_object_key,
-      validateStatus: (status) => status === 200,
+      validateStatus: (status: number) => status === 200,
     });
     const { url, fields } = res.data["url_data"];
     return [{ url, fields }, null];
@@ -33,8 +34,7 @@ export const upload_file_from_s3_presigned_link = async function (
   formData.append("file", file);
 
   try {
-    await Promise.resolve(process.nextTick(Boolean));
-    await axios.post(url, formData, {validateStatus: (status) => status === 204});
+    await axios.post(url, formData, {validateStatus: (status: number) => status === 204});
     return [null, null];
   } catch (e: unknown) {
     if (!(e instanceof AxiosError)) throw e;
@@ -50,10 +50,9 @@ export const get_s3_presigned_download_link = async function (
   PromiseResult<string, string>
 > {
   try {
-    await Promise.resolve(process.nextTick(Boolean));
     const res = await axios.post(`/get_presigned_download_link`, {
       s3_bucket_object_key: s3_bucket_object_key,
-      validateStatus: (status) => status === 200,
+      validateStatus: (status: number) => status === 200,
     });
     const url = res.data["url_data"];
     return [url, null];
