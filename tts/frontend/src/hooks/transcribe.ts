@@ -2,7 +2,7 @@ import { set_backend_path } from "frontend_tts_lib";
 import { RunpodModelType, RunpodTranscriptionStatus, RunpodTranscriptObject, S3UploadStatus, transcribe_audio, upload_file_s3 } from "frontend_tts_lib/endpoints";
 import { useEffect, useState } from "react";
 
-type TranscriptionState = S3UploadStatus | RunpodTranscriptionStatus | "INITIAL_STATE"
+export type TranscriptionState = S3UploadStatus | RunpodTranscriptionStatus | "INITIAL_STATE"
 
 export const useTranscriptionService = function(
     audioFile: File | null,

@@ -3,7 +3,11 @@ import { AudioFileIcon } from "../Icons/AudioFileIcon";
 import { shorten_file_name } from "../../utils/file_name_shortener";
 import { useState, useEffect } from "react";
 import sha256 from "crypto-js/sha256";
-import { useTranscriptionService } from "../../hooks/transcribe";
+import {
+  TranscriptionState,
+  useTranscriptionService,
+} from "../../hooks/transcribe";
+import { TranscriptObjectType } from "../../../../frontend_tts_lib/src/endpoints/runpod";
 
 type FileUploadFormProps = React.HTMLAttributes<HTMLFormElement>;
 
@@ -23,7 +27,7 @@ const FileUploadForm: React.FC<FileUploadFormProps> = ({
 
   useEffect(() => {
     if (file === null) return;
-    file.text().then(text => setS3ObjKey(sha256(text).toString() + ".wav"));
+    file.text().then((text) => setS3ObjKey(sha256(text).toString() + ".wav"));
   }, [file]);
 
   const onSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
@@ -36,10 +40,12 @@ const FileUploadForm: React.FC<FileUploadFormProps> = ({
   const [textareaValue, setTextareaValue] = useState("");
   useEffect(() => {
     setTextareaValue(
-      transcription?.map((t) => t.text).join("\n")
-      ?? transcriptionError
-      ?? transcriptionState
-    )
+      getDescriptionfromState(
+        transcriptionState,
+        transcriptionError,
+        transcription
+      )
+    );
   }, [transcription, transcriptionState, transcriptionError]);
 
   return (
@@ -114,3 +120,29 @@ const FileUploadForm: React.FC<FileUploadFormProps> = ({
 };
 
 export default FileUploadForm;
+
+function getDescriptionfromState(
+  transcriptionState: TranscriptionState,
+  transcriptionError: string | null,
+  transcription: TranscriptObjectType[] | null
+): string {
+  switch (transcriptionState) {
+    case "INITIAL_STATE":
+      return "";
+    case "GETTING_LINK":
+    case "UPLOADING":
+      return "Uploading audio file...";
+    case "IN_PROGRESS":
+    case "IN_QUEUE":
+    case "UPLOADED":
+      return "Transcribing audio...";
+    case "ERROR":
+    case "FAILED":
+      return transcriptionError ?? "An error occurred";
+    case "COMPLETED":
+      return (
+        transcription?.map((t) => t.text).join("\n") ??
+        "No transcription available"
+      );
+  }
+}
