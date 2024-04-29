@@ -1,6 +1,6 @@
 import axios, { AxiosError } from "axios";
 import { format_axios_error, PromiseResult } from "../utils/utils";
-import { ModelConfig, ModelType, SupportedLanguages, TranscriptionStatus, TranscriptObjectType } from "../types/runpod";
+import { ModelConfig, TranscriptionStatus, TranscriptObjectType } from "../types/runpod";
 
 export const create_transcription_job = async function (
   audio_download_url: string,

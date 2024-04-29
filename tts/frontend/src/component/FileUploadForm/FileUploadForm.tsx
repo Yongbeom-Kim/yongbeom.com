@@ -7,9 +7,9 @@ import {
   TranscriptionState,
   useTranscriptionService,
 } from "../../hooks/transcribe";
-import { RunpodModelConfig, RunpodModelType, RunpodTranscriptObjectType } from "frontend_tts_lib/types"
+import { RunpodModelConfig, RunpodTranscriptObjectType } from "frontend_tts_lib/types"
 import { TranscriptionResultForm } from "./TranscriptionResultForm";
-import { ModelConfigForm, modelConfigFromForm, ModelConfigObject } from "./ModelConfigForm";
+import { ModelConfigForm } from "./ModelConfigForm";
 
 type FileUploadFormProps = React.HTMLAttributes<HTMLFormElement>;
 
@@ -23,7 +23,7 @@ const FileUploadForm: React.FC<FileUploadFormProps> = ({
   const [file, setFile] = useState<File | null>(null);
   const [submitFile, setSubmitFile] = useState<File | null>(null);
   const [s3ObjKey, setS3ObjKey] = useState<string | null>(null);
-  const [modelConfig, setModelConfig] = useState<ModelConfigObject | null>(null);
+  const [modelConfig, setModelConfig] = useState<RunpodModelConfig | null>(null);
 
   const { transcription, transcriptionState, transcriptionError } =
     useTranscriptionService(submitFile, s3ObjKey, modelConfig, 5000);
@@ -52,6 +52,7 @@ const FileUploadForm: React.FC<FileUploadFormProps> = ({
     setFormState("SUBMITTED");
     const data = new FormData(e.target as HTMLFormElement);
     const formObject = Object.fromEntries(data.entries());
+    // @ts-expect-error fix this later
     const modelConfigObject = RunpodModelConfig.fromFormObject(formObject);
     setModelConfig(modelConfigObject);
   };

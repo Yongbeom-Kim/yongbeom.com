@@ -74,7 +74,7 @@ plan:
 	DIR=terraform TF_ACTION=plan $(MAKE) tf
 
 apply:
-	DIR=terraform TF_ACTION="apply" $(MAKE) tf
+	DIR=terraform TF_ACTION="apply -auto-approve" $(MAKE) tf
 
 destroy:
 	DIR=terraform TF_ACTION="destroy -auto-approve" $(MAKE) tf

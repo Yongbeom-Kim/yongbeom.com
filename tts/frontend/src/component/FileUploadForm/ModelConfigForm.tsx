@@ -1,6 +1,5 @@
 import classNames from "classnames";
 import {
-    RunpodModelConfig,
   RunpodModelType,
   RunpodSupportedLanguages,
 } from "frontend_tts_lib/types";
@@ -33,7 +32,7 @@ export const ModelConfigForm: React.FC<ModelConfigFormProps> = () => {
       <label htmlFor="language">Language</label>
       <select className={form_field_class} name="language" id="language" defaultValue={"Auto Detect"}>
         {languages.map((lang) => (
-          <option key={lang} value={lang == "Auto Detect" ? null : RunpodSupportedLanguages[lang]}>
+          <option key={lang} value={lang == "Auto Detect" ? undefined : lang.toString()}>
             {lang}
           </option>
         ))}

@@ -1,4 +1,4 @@
-import { ModelConfig, ModelType, TranscriptionStatus, TranscriptObjectType } from "../types/runpod";
+import { ModelConfig, TranscriptionStatus, TranscriptObjectType } from "../types/runpod";
 import { PromiseResult } from "../utils/utils";
 import { create_transcription_job, Milliseconds, request_transcription_text, wait_until_transcription_completed } from "./runpod";
 import {
