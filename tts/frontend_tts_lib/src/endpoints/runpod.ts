@@ -1,59 +1,17 @@
 import axios, { AxiosError } from "axios";
 import { format_axios_error, PromiseResult } from "../utils/utils";
-
-export type TranscriptionStatus =
-  | "ERROR"
-  | "COMPLETED"
-  | "IN_PROGRESS"
-  | "IN_QUEUE"
-  | "FAILED";
-
-export type ModelType =
-  | "tiny"
-  | "base"
-  | "small"
-  | "medium"
-  | "large-v1"
-  | "large-v2";
-
-export type SupportedLanguages = 'af' | 'ar' | 'hy' | 'az' | 'be' | 'bs' | 'bg' | 'ca' | 'zh' | 'hr' | 'cs'| 'da' | 'nl' | 'en' | 'et' | 'fi' | 'fr' | 'gl' | 'de' | 'el' | 'he' | 'hi' | 'hu' | 'is' | 'id' | 'it' | 'ja' | 'kn' | 'kk' | 'ko' | 'lv' | 'lt' | 'mk' | 'ms' | 'mr' | 'mi' | 'ne' | 'no' | 'fa' | 'pl' | 'pt' | 'ro' | 'ru' | 'sr' | 'sk' | 'sl' | 'es' | 'sw' | 'sv' | 'tl' | 'ta' | 'th' | 'tr' | 'uk' | 'ur' | 'vi' | 'cy';
+import { ModelConfig, ModelType, SupportedLanguages, TranscriptionStatus, TranscriptObjectType } from "../types/runpod";
 
 export const create_transcription_job = async function (
   audio_download_url: string,
-  model: ModelType = "base",
-  language: SupportedLanguages | undefined = undefined,
-  temperature: number = 0,
-  best_of: number = 5,
-  beam_size: number = 5,
-  patience: number = 1,
-  suppress_tokens: string = '-1',
-  initial_prompt: string = '',
-  condition_on_previous_text: boolean = false,
-  temperature_increment_on_fallback: number = 0.2,
-  compression_ratio_threshold: number = 2.4,
-  logprob_threshold: number = -1,
-  word_timestamps: boolean = false,
-  no_speech_threshold: number = 0.6,
+  config: ModelConfig
 ): Promise<PromiseResult<string, string>> {
   try {
     const res = await axios.post(
       `/transcribe_audio`,
       {
         audio_download_url,
-        model,
-        language,
-        temperature,
-        best_of,
-        beam_size,
-        patience,
-        suppress_tokens,
-        initial_prompt,
-        condition_on_previous_text,
-        temperature_increment_on_fallback,
-        compression_ratio_threshold,
-        logprob_threshold,
-        word_timestamps,
-        no_speech_threshold,
+        ...config.toRequestObject()
       },
       { validateStatus: (status: number) => status === 200 }
     );
@@ -77,12 +35,6 @@ const request_transcription_status = async function (
     if (!(e instanceof AxiosError)) throw e;
     return [null, format_axios_error(e)];
   }
-};
-
-export type TranscriptObjectType = {
-  end: number;
-  start: number;
-  text: string;
 };
 
 export const request_transcription_text: (

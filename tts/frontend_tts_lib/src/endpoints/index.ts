@@ -1,17 +1,12 @@
+import { ModelConfig, ModelType, TranscriptionStatus, TranscriptObjectType } from "../types/runpod";
 import { PromiseResult } from "../utils/utils";
-import { create_transcription_job, Milliseconds, ModelType, request_transcription_text, TranscriptionStatus, TranscriptObjectType, wait_until_transcription_completed } from "./runpod";
+import { create_transcription_job, Milliseconds, request_transcription_text, wait_until_transcription_completed } from "./runpod";
 import {
   get_s3_presigned_download_link,
   get_s3_presigned_upload_link,
   upload_file_from_s3_presigned_link,
   UploadStatus,
 } from "./s3";
-
-export type {
-  TranscriptionStatus as RunpodTranscriptionStatus,
-  ModelType as RunpodModelType,
-  TranscriptObjectType as RunpodTranscriptObject
-} from './runpod'
 
 export type {
   UploadStatus as S3UploadStatus,
@@ -57,13 +52,13 @@ export const upload_file_s3 = async function (
 
 export const transcribe_audio = async function (
   audio_download_url: string,
-  model: ModelType = "base",
+  modelConfig: ModelConfig,
   onProgress: (progress: TranscriptionStatus) => void = (() => {}),
   queryInterval: Milliseconds = 1000
 ): Promise<PromiseResult<TranscriptObjectType[], string>> {
   const [job_id, job_error] = await create_transcription_job(
     audio_download_url,
-    model
+    modelConfig
   );
   if (job_error) {
     return [null, `Error during creating transcription job: ${job_error}`];

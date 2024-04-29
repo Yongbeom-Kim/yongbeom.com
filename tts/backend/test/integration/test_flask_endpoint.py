@@ -55,7 +55,7 @@ def test_get_presigned_upload_link(backend_path: str):
 @pytest.mark.integration
 def test_overall_transcription_api(backend_path: str):
     response = request("POST", backend_path +
-                       "get_presigned_upload_link", 
+                       "get_presigned_upload_link",
                        json={"s3_bucket_object_key": "test.wav", "model": "tiny"})
     data = response.json()['url_data']
     audio_file = Path("./test/audio/gettysburg.wav")
@@ -68,8 +68,13 @@ def test_overall_transcription_api(backend_path: str):
         )
     assert response.status_code == 204
 
+    response = request("POST", backend_path + "get_presigned_download_link",
+                       json={'s3_bucket_object_key': "test.wav"})
+    assert response.status_code == 200
+    download_url = response.json()['url_data']
+
     response = request("POST", backend_path +
-                       "transcribe_object", json={"s3_bucket_object_key": "test.wav"})
+                       "transcribe_audio", json={"audio_download_url": download_url})
     job_id = response.json()['job_id']
     assert job_id != ""
 
@@ -85,3 +90,4 @@ def test_overall_transcription_api(backend_path: str):
                        "get_transcription", params={"job_id": job_id})
     assert response.status_code == 200
     assert response.json()['transcription'][0]['text'] != ''
+    assert False

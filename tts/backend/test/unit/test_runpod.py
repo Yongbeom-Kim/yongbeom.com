@@ -106,3 +106,19 @@ def test_submit_result_request():
     if status != 'COMPLETED':
         sleep(10)
         assert get_task_status(submit_result_request(id)) == 'COMPLETED'
+
+
+@pytest.mark.slow
+@pytest.mark.runpod
+def test_get_transcription_text():
+    success, id, error = submit_audio(submit_audio_request(sample_audio_url, 'tiny'))
+    assert success
+    while True:
+        status = get_task_status(submit_result_request(id))
+        assert status in ('IN_PROGRESS', 'IN_QUEUE', 'COMPLETED')
+        if status == 'COMPLETED':
+            break
+        sleep(1)
+    transcript = get_transcription(submit_result_request(id))
+    assert transcript is not None
+    assert transcript[0]['text'] != ''

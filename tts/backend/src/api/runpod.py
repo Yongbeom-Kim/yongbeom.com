@@ -67,7 +67,7 @@ def get_transcription(result_request_response: requests.Response) -> Transcript 
         return None
     if get_task_status(result_request_response) != 'COMPLETED':
         return None
-
+    
     segments = result_request_response.json()['output']['segments']
     transcript: List[Dict[str, int | float | str]] = [{
         'start': s['start'],
@@ -144,7 +144,7 @@ def submit_audio_request(
         requests.Response: The response from the API.
     """
     # url = "https://api.runpod.ai/v2/faster-whisper/run"
-    url =  f"{RUNPOD_API_URL}/run"
+    url = f"{RUNPOD_API_URL}/run"
     payload = {
         "input": {
             "audio": wav_file_url,
@@ -172,11 +172,10 @@ def submit_result_request(job_id: str) -> requests.Response:
         requests.Response: The response from the API.
 
     """
-    url =  f"{RUNPOD_API_URL}/status/{job_id}"
+    url = f"{RUNPOD_API_URL}/status/{job_id}"
 
     headers = {
         "accept": "application/json",
         "authorization": RUNPOD_API_KEY
     }
-
     return requests.get(url, headers=headers)

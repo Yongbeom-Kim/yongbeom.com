@@ -42,7 +42,7 @@ describe("test upload_file_from_s3_presigned_link", () => {
       file
     );
     expect(upload_err).toBeNull();
-  });
+  }, 15000);
 });
 
 describe("test get_s3_presigned_download_link", () => {

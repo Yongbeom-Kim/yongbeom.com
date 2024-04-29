@@ -7,7 +7,9 @@ import {
   TranscriptionState,
   useTranscriptionService,
 } from "../../hooks/transcribe";
-import { TranscriptObjectType } from "../../../../frontend_tts_lib/src/endpoints/runpod";
+import { RunpodModelConfig, RunpodModelType, RunpodTranscriptObjectType } from "frontend_tts_lib/types"
+import { TranscriptionResultForm } from "./TranscriptionResultForm";
+import { ModelConfigForm, modelConfigFromForm, ModelConfigObject } from "./ModelConfigForm";
 
 type FileUploadFormProps = React.HTMLAttributes<HTMLFormElement>;
 
@@ -21,23 +23,18 @@ const FileUploadForm: React.FC<FileUploadFormProps> = ({
   const [file, setFile] = useState<File | null>(null);
   const [submitFile, setSubmitFile] = useState<File | null>(null);
   const [s3ObjKey, setS3ObjKey] = useState<string | null>(null);
+  const [modelConfig, setModelConfig] = useState<ModelConfigObject | null>(null);
 
   const { transcription, transcriptionState, transcriptionError } =
-    useTranscriptionService(submitFile, s3ObjKey, "base", 5000);
+    useTranscriptionService(submitFile, s3ObjKey, modelConfig, 5000);
+
+  const [textareaValue, setTextareaValue] = useState("");
 
   useEffect(() => {
     if (file === null) return;
     file.text().then((text) => setS3ObjKey(sha256(text).toString() + ".wav"));
   }, [file]);
 
-  const onSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
-    e.preventDefault();
-    setSubmitFile(file);
-    setFile(null);
-    setFormState("SUBMITTED");
-  };
-
-  const [textareaValue, setTextareaValue] = useState("");
   useEffect(() => {
     setTextareaValue(
       getDescriptionfromState(
@@ -47,6 +44,17 @@ const FileUploadForm: React.FC<FileUploadFormProps> = ({
       )
     );
   }, [transcription, transcriptionState, transcriptionError]);
+
+  const onSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
+    e.preventDefault();
+    setSubmitFile(file);
+    setFile(null);
+    setFormState("SUBMITTED");
+    const data = new FormData(e.target as HTMLFormElement);
+    const formObject = Object.fromEntries(data.entries());
+    const modelConfigObject = RunpodModelConfig.fromFormObject(formObject);
+    setModelConfig(modelConfigObject);
+  };
 
   return (
     <div className="w-full h-full flex flex-col">
@@ -100,23 +108,14 @@ const FileUploadForm: React.FC<FileUploadFormProps> = ({
             onChange={(e) => {
               setFile(e.target.files![0] ?? null);
               setSubmitFile(null);
+              setFormState("BEFORE_SUBMIT");
             }}
             className="fixed invisible"
           />
         </div>
 
-        {formState === "BEFORE_SUBMIT" && <div>Extra Parameters</div>}
-        {formState === "SUBMITTED" && (
-          <textarea
-            value={textareaValue}
-            readOnly
-            className={classNames(
-              "w-8/12 py-1 resize-none mx-auto mb-10 h-full border-slate-700 border-[1px] border-solid rounded-xl focus:outline-none active:outline-none",
-              "bg-white disabled:bg-white",
-              { "text-red-800": transcriptionError !== null }
-            )}
-          ></textarea>
-        )}
+        {formState === "BEFORE_SUBMIT" && <ModelConfigForm />}
+        {formState === "SUBMITTED" && <TranscriptionResultForm hasError={transcriptionError !== null} text={textareaValue}/>}
       </form>
     </div>
   );
@@ -124,10 +123,11 @@ const FileUploadForm: React.FC<FileUploadFormProps> = ({
 
 export default FileUploadForm;
 
+
 function getDescriptionfromState(
   transcriptionState: TranscriptionState,
   transcriptionError: string | null,
-  transcription: TranscriptObjectType[] | null
+  transcription: RunpodTranscriptObjectType[] | null
 ): string {
   switch (transcriptionState) {
     case "INITIAL_STATE":
@@ -148,4 +148,6 @@ function getDescriptionfromState(
         "No transcription available"
       );
   }
+  // Typescript compiler happens otherwise
+  throw new Error("Invalid transcription state");
 }

@@ -20,7 +20,7 @@ app = Flask(__name__)
 
 # # CORS handled by lambda.
 if (os.getenv('ENABLE_FLASK_CORS') == '1'):
-    print('Flask CORS Enabled')
+    print('Flask CORS Enabled', flush=True)
     CORS(app)
 
 
