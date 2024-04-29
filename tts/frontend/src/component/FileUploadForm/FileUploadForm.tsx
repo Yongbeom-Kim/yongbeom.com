@@ -159,6 +159,6 @@ function getDescriptionfromState(
         "No transcription available"
       );
   }
-  // Typescript compiler happens otherwise
+  // Typescript compiler complains otherwise
   throw new Error("Invalid transcription state");
 }
