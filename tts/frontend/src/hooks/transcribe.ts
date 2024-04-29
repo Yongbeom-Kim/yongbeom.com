@@ -14,7 +14,7 @@ export const useTranscriptionService = function(
     set_backend_path(import.meta.env['VITE_BACKEND_ROUTE'])
     const [transcriptionState, setTranscriptionState] = useState<TranscriptionState>("INITIAL_STATE");
     const [audioURL, setAudioURL] = useState<string>("");
-    const [transcription, setTranscription] = useState<RunpodTranscriptObjectType[]>([]);
+    const [transcription, setTranscription] = useState<RunpodTranscriptObjectType[] | null>(null);
     const [transcriptionError, setTranscriptionError] = useState<string | null>(null);
 
     useEffect(() => {

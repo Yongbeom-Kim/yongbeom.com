@@ -13,13 +13,18 @@ import { ModelConfigForm } from "./ModelConfigForm";
 
 type FileUploadFormProps = React.HTMLAttributes<HTMLFormElement>;
 
-type FormState = "BEFORE_SUBMIT" | "SUBMITTED";
+enum FormState {
+  INITIAL = "INITIAL",
+  IN_PROGRESS = "IN_PROGRESS",
+  FILE_SELECTED = "FILE_SELECTED",
+  TRANSCRIBED = "TRANSCRIBED"
+}
 
 const FileUploadForm: React.FC<FileUploadFormProps> = ({
   className,
   ...props
 }) => {
-  const [formState, setFormState] = useState<FormState>("BEFORE_SUBMIT");
+  const [formState, setFormState] = useState<FormState>(FormState.INITIAL);
   const [file, setFile] = useState<File | null>(null);
   const [submitFile, setSubmitFile] = useState<File | null>(null);
   const [s3ObjKey, setS3ObjKey] = useState<string | null>(null);
@@ -43,13 +48,14 @@ const FileUploadForm: React.FC<FileUploadFormProps> = ({
         transcription
       )
     );
+    if (transcriptionState === "COMPLETED") setFormState(FormState.TRANSCRIBED);
   }, [transcription, transcriptionState, transcriptionError]);
 
   const onSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     setSubmitFile(file);
     setFile(null);
-    setFormState("SUBMITTED");
+    setFormState(FormState.IN_PROGRESS);
     const data = new FormData(e.target as HTMLFormElement);
     const formObject = Object.fromEntries(data.entries());
     // @ts-expect-error fix this later
@@ -71,11 +77,14 @@ const FileUploadForm: React.FC<FileUploadFormProps> = ({
         <div className="flex flex-row justify-center items-center">
           <label
             htmlFor="file_input"
+            
             className={classNames(
-              "my-2 p-3 text-slate-50 bg-slate-500 hover:bg-slate-600",
+              "my-2 p-3 text-slate-50",
               "flex flex-row items-center justify-center",
               "border-none rounded-l-xl",
-              "transition-all ease-in-out cursor-pointer"
+              "transition-all ease-in-out",
+              {"bg-slate-400 hover:bg-slate-400": formState === FormState.IN_PROGRESS},
+              {"bg-slate-500 hover:bg-slate-600 cursor-pointer": formState !== FormState.IN_PROGRESS},
             )}
           >
             <AudioFileIcon className="fill-white h-9 mr-2" /> Select File
@@ -89,11 +98,11 @@ const FileUploadForm: React.FC<FileUploadFormProps> = ({
               "border-none rounded-r-xl",
               "transition-all ease-in-out",
               {
-                "bg-slate-500 hover:bg-slate-600 cursor-pointer": file !== null,
+                "bg-slate-500 hover:bg-slate-600 cursor-pointer": formState === FormState.FILE_SELECTED,
               },
-              { "bg-slate-400 cursor-default": file === null }
+              { "bg-slate-400 cursor-default": formState !== FormState.FILE_SELECTED }
             )}
-            disabled={file === null}
+            disabled={formState !== FormState.FILE_SELECTED}
           >
             <div className="h-9 flex flex-row items-center justify-center">
               {file === null && "Upload File"}
@@ -106,17 +115,18 @@ const FileUploadForm: React.FC<FileUploadFormProps> = ({
             name="file_input"
             id="file_input"
             form="file_submit_form"
+            disabled={formState === FormState.IN_PROGRESS}
             onChange={(e) => {
               setFile(e.target.files![0] ?? null);
               setSubmitFile(null);
-              setFormState("BEFORE_SUBMIT");
+              setFormState(FormState.FILE_SELECTED);
             }}
             className="fixed invisible"
           />
         </div>
 
-        {formState === "BEFORE_SUBMIT" && <ModelConfigForm />}
-        {formState === "SUBMITTED" && <TranscriptionResultForm hasError={transcriptionError !== null} text={textareaValue}/>}
+        {(formState === FormState.INITIAL || formState === FormState.FILE_SELECTED) && <ModelConfigForm />}
+        {(formState === FormState.IN_PROGRESS || formState === FormState.TRANSCRIBED) && <TranscriptionResultForm hasError={transcriptionError !== null} text={textareaValue}/>}
       </form>
     </div>
   );
