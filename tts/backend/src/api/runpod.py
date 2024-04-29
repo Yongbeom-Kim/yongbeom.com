@@ -108,6 +108,7 @@ class AudioRequest(TypedDict):
     @classmethod
     def from_kwargs(cls, **kwargs: any) -> AudioRequest:
         """Add default values to the audio request. Removes any extra keys."""
+        kwargs = {k: v for k, v in kwargs.items() if v is not None}
         return ({
             'model': kwargs.get('model', 'base'),
             'transcription': kwargs.get('transcription', 'plain_text'),
@@ -144,7 +145,6 @@ def submit_audio_request(
     """
     # url = "https://api.runpod.ai/v2/faster-whisper/run"
     url =  f"{RUNPOD_API_URL}/run"
-    print('kwargs', kwargs)
     payload = {
         "input": {
             "audio": wav_file_url,

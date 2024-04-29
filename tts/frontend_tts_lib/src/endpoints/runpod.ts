@@ -16,9 +16,24 @@ export type ModelType =
   | "large-v1"
   | "large-v2";
 
+export type SupportedLanguages = 'af' | 'ar' | 'hy' | 'az' | 'be' | 'bs' | 'bg' | 'ca' | 'zh' | 'hr' | 'cs'| 'da' | 'nl' | 'en' | 'et' | 'fi' | 'fr' | 'gl' | 'de' | 'el' | 'he' | 'hi' | 'hu' | 'is' | 'id' | 'it' | 'ja' | 'kn' | 'kk' | 'ko' | 'lv' | 'lt' | 'mk' | 'ms' | 'mr' | 'mi' | 'ne' | 'no' | 'fa' | 'pl' | 'pt' | 'ro' | 'ru' | 'sr' | 'sk' | 'sl' | 'es' | 'sw' | 'sv' | 'tl' | 'ta' | 'th' | 'tr' | 'uk' | 'ur' | 'vi' | 'cy';
+
 export const create_transcription_job = async function (
   audio_download_url: string,
-  model: ModelType = "base"
+  model: ModelType = "base",
+  language: SupportedLanguages | undefined = undefined,
+  temperature: number = 0,
+  best_of: number = 5,
+  beam_size: number = 5,
+  patience: number = 1,
+  suppress_tokens: string = '-1',
+  initial_prompt: string = '',
+  condition_on_previous_text: boolean = false,
+  temperature_increment_on_fallback: number = 0.2,
+  compression_ratio_threshold: number = 2.4,
+  logprob_threshold: number = -1,
+  word_timestamps: boolean = false,
+  no_speech_threshold: number = 0.6,
 ): Promise<PromiseResult<string, string>> {
   try {
     const res = await axios.post(
@@ -26,6 +41,19 @@ export const create_transcription_job = async function (
       {
         audio_download_url,
         model,
+        language,
+        temperature,
+        best_of,
+        beam_size,
+        patience,
+        suppress_tokens,
+        initial_prompt,
+        condition_on_previous_text,
+        temperature_increment_on_fallback,
+        compression_ratio_threshold,
+        logprob_threshold,
+        word_timestamps,
+        no_speech_threshold,
       },
       { validateStatus: (status: number) => status === 200 }
     );

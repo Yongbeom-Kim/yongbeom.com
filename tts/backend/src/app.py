@@ -50,7 +50,6 @@ def transcribe_audio():
         return jsonify(message="No download url found"), 404
     
     audio_request_object = AudioRequest.from_kwargs(**request.json)
-    
     success, job_id, error = submit_audio(
         submit_audio_request(
             wav_file_url=download_url,

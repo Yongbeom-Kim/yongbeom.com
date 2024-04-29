@@ -97,7 +97,10 @@ const FileUploadForm: React.FC<FileUploadFormProps> = ({
             name="file_input"
             id="file_input"
             form="file_submit_form"
-            onChange={(e) => setFile(e.target.files![0] ?? null)}
+            onChange={(e) => {
+              setFile(e.target.files![0] ?? null);
+              setSubmitFile(null);
+            }}
             className="fixed invisible"
           />
         </div>

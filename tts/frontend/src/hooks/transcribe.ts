@@ -19,6 +19,8 @@ export const useTranscriptionService = function(
     useEffect(() => {
         if (audioFile === null) return;
         if (s3UploadObjectKey === null) return;
+        setTranscription([])
+        setTranscriptionError(null);
         upload_file_s3(s3UploadObjectKey, audioFile, setTranscriptionState).then(([download_url, err]) => {
             if (err) {
                 setTranscriptionError(`Something went wrong when uploading file: ${err}`);
