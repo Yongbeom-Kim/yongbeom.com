@@ -19,6 +19,8 @@ const AUDIO_FILE_URL =
   "https://github.com/runpod-workers/sample-inputs/raw/main/audio/gettysburg.wav";
 const WHIPSER_MODEL_CONFIG = ModelConfig.fromObject({model: ModelType.TINY})
 
+jest.mock('axios');
+
 // TODO: backend path should be set in a global setup file, with separate values for local and prod backend
 beforeEach(() => {
   set_backend_path("http://localhost:5000");

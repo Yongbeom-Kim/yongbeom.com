@@ -25,7 +25,7 @@ def backend_path(backend_container: DockerContainer):
     return f"http://{backend_container.get_container_host_ip()}:{backend_container.get_exposed_port(CONT_EXPOSTED_PORT)}/"
 
 
-@pytest.mark.integration
+@pytest.mark.component
 def test_aws_auth(backend_container: DockerContainer):
     env_var_str = backend_container.exec("env").output.decode()
     env_vars = dict([line.split("=", 1) for line in env_var_str.splitlines()])
@@ -33,13 +33,13 @@ def test_aws_auth(backend_container: DockerContainer):
     assert env_vars.get("AWS_SECRET_KEY", "") != ""
 
 
-@pytest.mark.integration
+@pytest.mark.component
 def test_flask_endpoint(backend_path: str):
     response = request("GET", backend_path)
     assert "OK" in response.content.decode()
 
 
-@pytest.mark.integration
+@pytest.mark.component
 def test_get_presigned_upload_link(backend_path: str):
     response = request("POST", backend_path +
                        "get_presigned_upload_link", json={"s3_bucket_object_key": "test.txt"})
@@ -52,7 +52,7 @@ def test_get_presigned_upload_link(backend_path: str):
     assert response.status_code == 204
 
 
-@pytest.mark.integration
+@pytest.mark.component
 def test_overall_transcription_api(backend_path: str):
     response = request("POST", backend_path +
                        "get_presigned_upload_link",
@@ -90,4 +90,3 @@ def test_overall_transcription_api(backend_path: str):
                        "get_transcription", params={"job_id": job_id})
     assert response.status_code == 200
     assert response.json()['transcription'][0]['text'] != ''
-    assert False

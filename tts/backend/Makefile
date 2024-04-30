@@ -4,7 +4,7 @@ ifeq "$(ENABLE_FLASK_CORS)" ""
 ENABLE_FLASK_CORS := 0
 endif
 
-PYTHON_INTEGRATION_TEST_VENV=.integration_test.venv
+PYTHON_COMPONENT_TEST_VENV=.component_test.venv
 
 flask:
 	@ set -a && . ./.env.terraform && set +a && \
@@ -13,15 +13,15 @@ dev:
 	ENABLE_FLASK_CORS=1 $(MAKE) docker_run
 
 unit_test: 
-	COMMAND="pytest --ignore=test/integration" $(MAKE) docker_run_cmd
+	COMMAND="pytest -m unit test/unit" $(MAKE) docker_run_cmd
 
-integration_test: $(PYTHON_INTEGRATION_TEST_VENV)
+component_test: $(PYTHON_COMPONENT_TEST_VENV)
 	@ echo "Building docker image..."
 	@ $(MAKE) docker_build > /dev/null
-	@ echo "Running integration tests..."
+	@ echo "Running component tests..."
 	. .test.venv/bin/activate && \
 		set -a && . ./.env.terraform && set +a && \
-		pytest --ignore=test/unit
+		pytest -m component test/component
 
 ## Docker
 
@@ -86,8 +86,8 @@ fmt:
 
 
 ## Python Environments
-$(PYTHON_INTEGRATION_TEST_VENV): test/integration/requirements.txt
+$(PYTHON_COMPONENT_TEST_VENV): test/component/requirements.txt
 	rm -rf $@
 	python3 -m venv $@
 	. .test.venv/bin/activate && \
-		pip install -r test/integration/requirements.txt
+		pip install -r test/component/requirements.txt

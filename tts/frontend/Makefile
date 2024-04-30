@@ -1,7 +1,7 @@
 backend_tfstate_path:=../backend/terraform/terraform.tfstate
 backend_path:=$(shell terraform output -raw -state=$(backend_tfstate_path) backend_lambda_url)
 
-.PHONY: test
+.PHONY: unit_test
 
 dev:
 	yarn run dev
@@ -18,7 +18,7 @@ build:
 # 	@ set -a && . ./.env.production && set +a && \
 # 	yarn vitest run
 
-test:
+unit_test:
 	@ set -a && . ./.env.development && set +a && \
 	yarn vitest run
 
