@@ -11,6 +11,7 @@ from test.unit.runpod_response import (
     status_response_error,
     status_response_in_progress,
     status_response_complete,
+    status_response_complete_no_transcript
 )
 
 from test.unit.utils import create_http_response
@@ -71,6 +72,12 @@ def test_get_transcription_in_progress():
 
 @pytest.mark.fast
 @pytest.mark.runpod
+def test_get_transcription_complete_no_transcript():
+    assert get_transcription(status_response_complete_no_transcript) is None
+
+
+@pytest.mark.fast
+@pytest.mark.runpod
 def test_get_transcription_complete():
     assert get_transcription(status_response_complete) != ""
 
@@ -78,14 +85,14 @@ def test_get_transcription_complete():
 @pytest.mark.slow
 @pytest.mark.runpod
 def test_submit_audio_request_success():
-    response = submit_audio_request(sample_audio_url, 'tiny')
+    response = submit_audio_request(sample_audio_url, model='tiny')
     assert response.status_code == 200
 
 
 @pytest.mark.slow
 @pytest.mark.runpod
 def test_submit_audio_request_not_url():
-    response = submit_audio_request('not_url', 'tiny')
+    response = submit_audio_request('not_url', model='tiny')
     assert response.status_code == 200
 
 
@@ -99,7 +106,7 @@ def test_submit_result_request_invalid_id():
 @pytest.mark.slow
 @pytest.mark.runpod
 def test_submit_result_request():
-    success, id, error = submit_audio(submit_audio_request(sample_audio_url, 'tiny'))
+    success, id, error = submit_audio(submit_audio_request(sample_audio_url, model='tiny'))
     assert success
     status = get_task_status(submit_result_request(id))
     assert status in ('IN_PROGRESS', 'IN_QUEUE', 'COMPLETED')
@@ -111,7 +118,7 @@ def test_submit_result_request():
 @pytest.mark.slow
 @pytest.mark.runpod
 def test_get_transcription_text():
-    success, id, error = submit_audio(submit_audio_request(sample_audio_url, 'tiny'))
+    success, id, error = submit_audio(submit_audio_request(sample_audio_url, model='tiny'))
     assert success
     while True:
         status = get_task_status(submit_result_request(id))

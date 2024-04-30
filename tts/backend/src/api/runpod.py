@@ -67,6 +67,8 @@ def get_transcription(result_request_response: requests.Response) -> Transcript 
         return None
     if get_task_status(result_request_response) != 'COMPLETED':
         return None
+    if 'output' not in result_request_response.json():
+        return None
     
     segments = result_request_response.json()['output']['segments']
     transcript: List[Dict[str, int | float | str]] = [{
