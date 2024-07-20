@@ -1,10 +1,22 @@
 import { IconBulb, IconBulbFilled } from '@tabler/icons-react'
-import { useEffect, useState } from 'react'
+import {
+  ButtonHTMLAttributes,
+  DetailedHTMLProps,
+  useEffect,
+  useState,
+} from 'react'
 import { isMobile } from '../../util/screen'
+import classNames from 'classnames'
 
 type Theme = 'light' | 'dark'
 
-export default function DarkModeButton() {
+export default function DarkModeButton({
+  className,
+  ...props
+}: DetailedHTMLProps<
+  ButtonHTMLAttributes<HTMLButtonElement>,
+  HTMLButtonElement
+>) {
   const [theme, setTheme] = useState<Theme>(getBrowserTheme())
   const toggleTheme = () => {
     setTheme((theme) => (theme === 'light' ? 'dark' : 'light'))
@@ -17,21 +29,23 @@ export default function DarkModeButton() {
   }, [theme])
 
   return (
-    <div>
-      <button
-        className="bg-transparent hover:bg-none outline-none hover:outline-none focus:outline-none border-transparent focus:border-transparent"
-        onClick={toggleTheme}
-        onMouseEnter={() => setButtonHover(true)}
-        onMouseLeave={() => setButtonHover(false)}
-      >
-        {!isMobile() && !isButtonHover && (
-          <IconBulb {...(theme == 'dark' && { color: 'white' })} />
-        )}
-        {(isMobile() || isButtonHover) && (
-          <IconBulbFilled {...(theme == 'dark' && { color: 'white' })} />
-        )}
-      </button>
-    </div>
+    <button
+      className={classNames(
+        'bg-transparent hover:bg-none outline-none hover:outline-none focus:outline-none border-transparent focus:dark:border-white focus:border-blue-950 rounded-full aspect-square p-3',
+        className
+      )}
+      onClick={toggleTheme}
+      onMouseEnter={() => setButtonHover(true)}
+      onMouseLeave={() => setButtonHover(false)}
+      {...props}
+    >
+      {!isMobile() && !isButtonHover && (
+        <IconBulb {...(theme == 'dark' && { color: 'white' })} />
+      )}
+      {(isMobile() || isButtonHover) && (
+        <IconBulbFilled {...(theme == 'dark' && { color: 'white' })} />
+      )}
+    </button>
   )
 }
 
