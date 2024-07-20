@@ -135,7 +135,7 @@ export const SubSectionHeader = ({
   return (
     <div className={classNames('mt-8', className)} {...props}>
       {info !== undefined && (
-        <div className="text-xs dark:text-slate-400">{info}</div>
+        <div className="text-xs dark:text-slate-400 text-slate-700">{info}</div>
       )}
       <h3 className="font-medium dark:text-slate-200 text-slate-800">
         {href ? (
