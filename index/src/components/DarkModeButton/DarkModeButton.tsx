@@ -31,7 +31,7 @@ export default function DarkModeButton({
   return (
     <button
       className={classNames(
-        'bg-transparent hover:bg-none outline-none hover:outline-none focus:outline-none border-transparent focus:dark:border-white focus:border-blue-950 rounded-full aspect-square p-3',
+        'bg-transparent hover:bg-none outline-none hover:outline-none hover:border-none focus:outline-none focus:border-none border-transparent rounded-full aspect-square p-3',
         className
       )}
       onClick={toggleTheme}
