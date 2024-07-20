@@ -9,7 +9,8 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "prepare": "cd .. && husky index/.husky",
-    "prettier-watch": "onchange \"**/*\" -- prettier --write --ignore-unknown {{changed}}"
+    "prettier-watch": "onchange \"**/*\" -- prettier --write --ignore-unknown {{changed}}",
+    "deploy": "yarn build && cd terraform && tofu init && tofu plan && tofu apply"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
