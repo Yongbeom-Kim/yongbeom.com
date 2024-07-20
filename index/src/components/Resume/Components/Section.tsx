@@ -55,20 +55,23 @@ export const SectionHeader = ({
     sticky = true
   }
   return (
-    <h2
-      {...props}
-      className={classNames(
-        'text-lg font-medium tracking-tight dark:text-slate-200 text-slate-800 sm:text-xl mt-4 font-overpass',
-        { 'sticky top-0 z-20': sticky },
-        'bg-gradient-to-r dark:from-black/80 dark:to-blue-950/80 from-white/80 to-blue-100/80 py-4',
-        'backdrop-filter backdrop-blur bg-opacity-50',
-        'lg:bg-none lg:backdrop-blur-none lg:relative',
-        className
-      )}
-      id={children}
-    >
-      {children}
-    </h2>
+    <div className=" left-0 w-screen">
+      <h2
+        {...props}
+        className={classNames(
+          'text-lg font-medium tracking-tight dark:text-slate-200 text-slate-800 sm:text-xl mt-4 font-overpass',
+          { 'sticky top-0 z-20': sticky },
+          'bg-gradient-to-r dark:from-black/80 dark:to-blue-950/80 from-white/80 to-blue-100/80 py-4',
+          'backdrop-filter backdrop-blur bg-opacity-50',
+          'lg:bg-none lg:backdrop-blur-none lg:relative',
+          '-translate-x-[max(15%,16px)] pl-[max(15%,16px)]', // Dumb hack to counteract padding in parent
+          className
+        )}
+        id={children}
+      >
+        {children}
+      </h2>
+    </div>
   )
 }
 
