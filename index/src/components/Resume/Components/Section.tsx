@@ -55,7 +55,7 @@ export const SectionHeader = ({
     sticky = true
   }
   return (
-    <div className=" left-0 w-screen">
+    <div className=" left-0 w-screen lg:w-auto">
       <h2
         {...props}
         className={classNames(
