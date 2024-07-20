@@ -16,7 +16,7 @@ export default function StyledLink({
       className={classNames(
         'm-0 p-0 bg-none outline-none hover:outline-none active:outline-none',
         'inline-flex flex-row group',
-        'hover:text-teal-500 hover:text-opacity-75',
+        'hover:text-teal-500 hover:text-opacity-75 hover:scale-[104%]',
         className
       )}
       {...props}

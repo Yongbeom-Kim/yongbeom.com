@@ -33,7 +33,7 @@ function SocialIcon({ icon, ...props }: SocialIconProps) {
       <SvgIcon
         size={32}
         stroke={2}
-        className="dark:stroke-slate-300 dark:hover:stroke-slate-100 stroke-slate-600 hover:stroke-slate-900"
+        className="dark:stroke-slate-300 stroke-slate-600 hover:stroke-teal-500 hover:stroke-opacity-75 hover:scale-[115%]"
       />
     </a>
   )

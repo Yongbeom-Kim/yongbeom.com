@@ -5,13 +5,21 @@ type TitleProps = DetailedHTMLProps<
   HTMLAttributes<HTMLHeadingElement>,
   HTMLHeadingElement
 >
-export const Title = ({ children, ...props }: TitleProps) => {
+export const Title = ({ children, className, ...props }: TitleProps) => {
   return (
     <h1
       {...props}
-      className="text-4xl font-bold tracking-tight dark:text-slate-200 text-slate-900 sm:text-5xl"
+      className={classNames(
+        'text-4xl font-bold tracking-tight dark:text-slate-200 text-slate-900 sm:text-5xl',
+        className
+      )}
     >
-      <a href="/">{children}</a>
+      <a
+        href="/"
+        className="block hover:text-teal-500 hover:text-opacity-75 hover:scale-[105%] ease-in-out transform transition-transform"
+      >
+        {children}
+      </a>
     </h1>
   )
 }
@@ -21,22 +29,26 @@ type SectionProps = DetailedHTMLProps<
   HTMLDivElement
 >
 
-export const Section = ({ children, ...props }: SectionProps) => {
+export const Section = ({ children, className, ...props }: SectionProps) => {
   return (
-    <div {...props} className="mt-6 flex flex-col">
+    <div {...props} className={classNames('mt-6 flex flex-col', className)}>
       {children}
     </div>
   )
 }
 
-type SectionHeaderProps = { sticky?: boolean } & DetailedHTMLProps<
-  HTMLAttributes<HTMLHeadingElement>,
-  HTMLHeadingElement
+type SectionHeaderProps = {
+  sticky?: boolean
+  children: string
+} & Omit<
+  DetailedHTMLProps<HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>,
+  'children'
 >
 
 export const SectionHeader = ({
   sticky,
   children,
+  className,
   ...props
 }: SectionHeaderProps) => {
   if (sticky === undefined) {
@@ -48,12 +60,40 @@ export const SectionHeader = ({
       className={classNames(
         'text-lg font-medium tracking-tight dark:text-slate-200 text-slate-800 sm:text-xl mt-4 font-overpass',
         { 'sticky top-0 z-20': sticky },
-        'w-screen bg-gradient-to-r dark:from-black/80 dark:to-blue-950/80 from-white/80 to-blue-100/80 py-4',
-        'backdrop-filter backdrop-blur bg-opacity-50'
+        'bg-gradient-to-r dark:from-black/80 dark:to-blue-950/80 from-white/80 to-blue-100/80 py-4',
+        'backdrop-filter backdrop-blur bg-opacity-50',
+        'lg:bg-none lg:backdrop-blur-none lg:relative',
+        className
       )}
+      id={children}
     >
       {children}
     </h2>
+  )
+}
+
+type SectionNavProps = { headers: string[] } & React.DetailedHTMLProps<
+  React.HTMLAttributes<HTMLElement>,
+  HTMLElement
+>
+export const SectionNav = ({
+  headers,
+  className,
+  ...props
+}: SectionNavProps) => {
+  return (
+    <nav className={classNames('mt-10', className)} {...props}>
+      {headers.map((item) => (
+        <div>
+          <a
+            href={`#${item}`}
+            className="block hover:text-teal-500 hover:text-opacity-75 hover:scale-[105%] ease-in-out transform transition-transform"
+          >
+            {item}
+          </a>
+        </div>
+      ))}
+    </nav>
   )
 }
 
@@ -64,24 +104,17 @@ type SectionDescriptionProps = DetailedHTMLProps<
 
 export const SectionDescription = ({
   children,
+  className,
   ...props
 }: SectionDescriptionProps) => {
   return (
     <div
       {...props}
-      className="text-base leading-5 dark:text-slate-400 text-slate-700 flex flex-col gap-3"
+      className={classNames(
+        'text-base leading-5 dark:text-slate-400 text-slate-700 flex flex-col gap-3',
+        className
+      )}
     >
-      {children}
-    </div>
-  )
-}
-
-export const SubSection = ({
-  children,
-  ...props
-}: DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>) => {
-  return (
-    <div {...props} className="flex flex-col">
       {children}
     </div>
   )
@@ -100,7 +133,7 @@ export const SubSectionHeader = ({
   ...props
 }: SubSectionHeaderProps) => {
   return (
-    <div className={classNames('mt-2', className)} {...props}>
+    <div className={classNames('mt-8', className)} {...props}>
       {info !== undefined && (
         <div className="text-xs dark:text-slate-400">{info}</div>
       )}
@@ -124,9 +157,17 @@ type SubSectionDescriptionProps = React.DetailedHTMLProps<
 
 export const SubSectionDescription = ({
   children,
+  className,
+  ...props
 }: SubSectionDescriptionProps) => {
   return (
-    <p className="text-base leading-5 dark:text-slate-400 text-slate-700 flex flex-col gap-2">
+    <p
+      className={classNames(
+        'text-base leading-5 dark:text-slate-400 text-slate-700 flex flex-col gap-2',
+        className
+      )}
+      {...props}
+    >
       {children}
     </p>
   )
