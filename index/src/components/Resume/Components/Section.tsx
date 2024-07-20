@@ -139,7 +139,7 @@ export const SubSectionSkills = ({ children }: SubSectionSkillsProps) => {
   return (
     <div className="text-sm dark:text-slate-300 text-slate-500 flex flex-row flex-wrap gap-2 mt-1.5 mb-2">
       {children.map((skill) => (
-        <span className="py-1 px-2 bg-teal-600 bg-opacity-50 text-teal-300 text-opacity-90 rounded-full">
+        <span className="py-1 px-2 dark:bg-teal-700 bg-teal-200 bg-opacity-40 dark:text-teal-300 text-teal-700 text-opacity-90 rounded-full">
           {skill}
         </span>
       ))}
