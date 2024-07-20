@@ -90,7 +90,7 @@ export const SectionNav = ({
         <div>
           <a
             href={`#${item}`}
-            className="block hover:text-teal-500 hover:text-opacity-75 hover:scale-[105%] ease-in-out transform transition-transform"
+            className="font-overpass block hover:text-teal-500 hover:text-opacity-75 hover:scale-[105%] ease-in-out transform transition-transform"
           >
             {item}
           </a>
