@@ -1,0 +1,96 @@
+{
+  "metadata": {},
+  "project": {
+    "shadows": true,
+    "shadowType": 1,
+    "toneMapping": 0,
+    "toneMappingExposure": 1
+  },
+  "camera": {
+    "metadata": {
+      "version": 4.6,
+      "type": "Object",
+      "generator": "Object3D.toJSON"
+    },
+    "object": {
+      "uuid": "f66eeb06-974a-4e69-9fce-f820268a945a",
+      "type": "PerspectiveCamera",
+      "name": "Camera",
+      "layers": 1,
+      "matrix": [
+        -0.15673999667192073, 4.336808689942018e-18, -0.9876399006942187, 0,
+        -0.009595519419081908, 0.8999475579245355, 0.0015228239368975265, 0,
+        0.9875823519317699, 0.010795116961080823, -0.15673086359332755, 0,
+        110.64492710271001, 1.2094433713681192, -17.559522953308743, 1
+      ],
+      "up": [0, 1, 0],
+      "fov": 50,
+      "zoom": 1,
+      "near": 0.01,
+      "far": 1000,
+      "focus": 10,
+      "aspect": 0.9360086767895879,
+      "filmGauge": 35,
+      "filmOffset": 0
+    }
+  },
+  "scene": {
+    "metadata": {
+      "version": 4.6,
+      "type": "Object",
+      "generator": "Object3D.toJSON"
+    },
+    "geometries": [
+      {
+        "uuid": "ed5853b6-f01f-40fb-a35a-153f84156a06",
+        "type": "BoxGeometry",
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "widthSegments": 1,
+        "heightSegments": 1,
+        "depthSegments": 1
+      }
+    ],
+    "materials": [
+      {
+        "uuid": "052f27ba-baed-4461-8a92-64de9c933071",
+        "type": "MeshStandardMaterial",
+        "color": 16777215,
+        "roughness": 1,
+        "metalness": 0,
+        "emissive": 0,
+        "envMapRotation": [0, 0, 0, "XYZ"],
+        "envMapIntensity": 1,
+        "side": 2,
+        "blendColor": 0
+      }
+    ],
+    "object": {
+      "uuid": "375864fb-3675-4489-a9ef-2ea64bb2430a",
+      "type": "Scene",
+      "name": "Scene",
+      "layers": 1,
+      "matrix": [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+      "up": [0, 1, 0],
+      "children": [
+        {
+          "uuid": "d34278c5-20f3-4024-84e5-6d03aab78af2",
+          "type": "Mesh",
+          "name": "Box",
+          "receiveShadow": true,
+          "layers": 1,
+          "matrix": [-50, 0, 0, 0, 0, -10, 0, 0, 0, 0, -50, 0, 0, 5, 0, 1],
+          "up": [0, 1, 0],
+          "geometry": "ed5853b6-f01f-40fb-a35a-153f84156a06",
+          "material": "052f27ba-baed-4461-8a92-64de9c933071"
+        }
+      ],
+      "backgroundRotation": [0, 0, 0, "XYZ"],
+      "environmentRotation": [0, 0, 0, "XYZ"]
+    }
+  },
+  "scripts": {},
+  "history": { "undos": [], "redos": [] },
+  "environment": null
+}
