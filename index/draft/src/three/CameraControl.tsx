@@ -34,6 +34,7 @@ export function Camera() {
 
   return (
     <>
+      {/* TODO: delete this (not necessary) */}
       <mesh position={[0, 0, 0]} ref={playerMeshRef}>
         <Box args={[2, cameraPosition.y + 4, 2]} />
         <meshBasicMaterial wireframe />
