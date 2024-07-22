@@ -127,7 +127,9 @@ function useKeyboardMovement({
       controls.current.moveForward(direction.z * moveSpeed)
       controls.current.moveRight(direction.x * moveSpeed)
     } else {
-      controls.current.camera.position.add(intersectNormalVector.negate())
+      controls.current.camera.position.add(
+        intersectNormalVector.negate().multiplyScalar(moveSpeed) // TODO: Fix this, this is only negate cause we are INSIDE the box. All others do not negate.
+      )
     }
   }
   return animate
@@ -145,20 +147,21 @@ function useCollisionDetection() {
   ) => {
     origin.copy(controls.getObject().position)
     direction.copy(controls.getDirection(new THREE.Vector3(0, 0, 0)).clone())
-    raycasters.forEach((raycaster, index) => {
-      direction.applyAxisAngle(
-        new THREE.Vector3(0, 1, 0),
-        (index * Math.PI) / 4
-      )
-      raycaster.set(origin, direction.clone())
-    })
-    const intersection = raycasters
-      .flatMap((ray) => ray.intersectObjects(scene.children)[0])
-      .filter((intersection) => intersection.distance < 1)[0]
 
-    if (intersection !== undefined) {
-      return intersection.face?.normal ?? new THREE.Vector3(0, 0, 0)
+    for (let i = 0; i < raycasters.length; i++) {
+      const raycaster = raycasters[i]
+      direction.applyAxisAngle(new THREE.Vector3(0, 1, 0), (i * Math.PI) / 4)
+      raycaster.set(origin, direction.clone())
     }
+
+    for (let i = 0; i < raycasters.length; i++) {
+      const ray = raycasters[i]
+      const intersection = ray.intersectObjects(scene.children)[0]
+      if (intersection !== undefined && intersection.distance < 1) {
+        return intersection.face?.normal ?? new THREE.Vector3(0, 0, 0)
+      }
+    }
+
     return new THREE.Vector3(0, 0, 0)
   }
 
