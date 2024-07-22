@@ -60,7 +60,7 @@ export const SectionHeader = ({
       className={classNames(
         'text-lg font-medium tracking-tight dark:text-slate-200 text-slate-800 sm:text-xl mt-4 font-overpass',
         { 'sticky top-0 z-20': sticky },
-        'bg-gradient-to-r dark:from-black/80 dark:to-blue-950/80 from-white/80 to-blue-100/80 py-4',
+        'bg-gradient-to-r dark:from-black/80 dark:to-[#00001F]/80 from-white/80 to-blue-100/80 py-4',
         'backdrop-filter backdrop-blur bg-opacity-50',
         'lg:bg-none lg:backdrop-blur-none lg:relative',
         'w-screen -translate-x-[max(15%,16px)] pl-[max(15vw,16px)]', // Dumb hack to counteract padding in parent
