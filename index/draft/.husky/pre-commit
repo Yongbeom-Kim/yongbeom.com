@@ -1,0 +1,2 @@
+cd index/draft
+yarn lint-staged
