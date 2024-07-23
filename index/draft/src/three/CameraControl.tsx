@@ -1,16 +1,12 @@
 import * as THREE from 'three'
-import { Box, PerspectiveCamera, PointerLockControls } from '@react-three/drei'
+import { PerspectiveCamera, PointerLockControls } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { useRef, useState, useEffect } from 'react'
 import { PointerLockControls as PointerLockControlsType } from 'three/addons/controls/PointerLockControls'
 
 export function Camera() {
   const controls = useRef<PointerLockControlsType | null>(null)
-  // Box mesh that represents the player for collision detection
-  const playerMeshRef = useRef<THREE.Mesh>(null)
-
   const cameraPosition = new THREE.Vector3(0, 2, 0)
-  const playerMeshRefOffset = new THREE.Vector3(0, -2, 0)
 
   const keyboardMovementAnimateCallback = useKeyboardMovement({
     controls,
@@ -22,23 +18,10 @@ export function Camera() {
       return
     }
     keyboardMovementAnimateCallback(controls, scene)
-
-    if (!playerMeshRef.current) {
-      return
-    }
-    playerMeshRef.current.position.addVectors(
-      controls.current.camera.position,
-      playerMeshRefOffset
-    )
   })
 
   return (
     <>
-      {/* TODO: delete this (not necessary) */}
-      <mesh position={[0, 0, 0]} ref={playerMeshRef}>
-        <Box args={[2, cameraPosition.y + 4, 2]} />
-        <meshBasicMaterial wireframe />
-      </mesh>
       <PerspectiveCamera position={cameraPosition} />
       <PointerLockControls ref={controls} />
     </>
