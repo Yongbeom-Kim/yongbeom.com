@@ -4,7 +4,7 @@ import { useFrame } from '@react-three/fiber'
 import { useRef, useState, useEffect } from 'react'
 import { PointerLockControls as PointerLockControlsType } from 'three/addons/controls/PointerLockControls'
 
-export function Camera() {
+export function PointerLockCameraControl() {
   const controls = useRef<PointerLockControlsType | null>(null)
   const cameraPosition = new THREE.Vector3(0, 2, 0)
 
@@ -82,7 +82,6 @@ function useKeyboardMovement({
     document.addEventListener('keydown', onKeyDown)
     document.addEventListener('keyup', onKeyUp)
     controls.current.camera.position.y = cameraPosition.y
-
     new THREE.Raycaster()
     return () => {
       document.removeEventListener('keydown', onKeyDown)
