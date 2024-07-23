@@ -119,9 +119,7 @@ function useKeyboardMovement({
 }
 
 function useCollisionDetection() {
-  //   const raycaster = new THREE.Raycaster()
   const raycasters = [...Array(8).keys()].map(() => new THREE.Raycaster())
-  const direction = new THREE.Vector3()
   const origin = new THREE.Vector3()
 
   const hasCollision = (
@@ -129,7 +127,7 @@ function useCollisionDetection() {
     scene: THREE.Scene
   ) => {
     origin.copy(controls.getObject().position)
-    direction.copy(controls.getDirection(new THREE.Vector3(0, 0, 0)).clone())
+    const direction = new THREE.Vector3(0, 0, 1)
 
     for (let i = 0; i < raycasters.length; i++) {
       const raycaster = raycasters[i]

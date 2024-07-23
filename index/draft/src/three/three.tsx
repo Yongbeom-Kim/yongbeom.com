@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import { useRef } from 'react'
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader'
-import { Camera } from './Camera/PointerLockCameraControl'
+import { PointerLockCameraControl } from './Camera/PointerLockCameraControl'
 
 type ThreeCanvasProps = React.DetailedHTMLProps<
   React.HTMLAttributes<HTMLDivElement>,
@@ -20,7 +20,7 @@ export default function ThreeCanvas({ className, ...props }: ThreeCanvasProps) {
           position={[0, 0, 0]}
           children-0-castShadow
         />
-        <Camera />
+        <PointerLockCameraControl />
         {/* <FloorMesh /> */}
         <BoxMesh position={new THREE.Vector3(0, 1, 0)} size={2} />
         <BoxMesh position={new THREE.Vector3(3, 0.25, 0)} size={0.5} />
