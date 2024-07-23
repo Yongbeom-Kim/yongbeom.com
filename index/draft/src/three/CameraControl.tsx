@@ -129,7 +129,7 @@ function useKeyboardMovement({
       controls.current.moveRight(direction.x * moveSpeed)
     } else {
       controls.current.camera.position.add(
-        intersectNormalVector.multiplyScalar(moveSpeed) // TODO: Fix this, this is only negate cause we are INSIDE the box. All others do not negate.
+        intersectNormalVector.multiplyScalar(moveSpeed)
       )
     }
   }
