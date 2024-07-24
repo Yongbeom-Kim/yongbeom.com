@@ -7,13 +7,20 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader'
 import { PointerLockCameraControl } from './Camera/PointerLockCameraControl'
 import { OrbitCameraControl } from './Camera/OrbitCameraControl'
 import TouchControls from '../component/TouchControls/TouchControls'
+import { Controls } from '../component/ControlMenu/ControlMenu'
 
-type ThreeCanvasProps = React.DetailedHTMLProps<
+type ThreeCanvasProps = {
+  controls?: Controls
+} & React.DetailedHTMLProps<
   React.HTMLAttributes<HTMLDivElement>,
   HTMLDivElement
 >
 
-export default function ThreeCanvas({ className, ...props }: ThreeCanvasProps) {
+export default function ThreeCanvas({
+  controls,
+  className,
+  ...props
+}: ThreeCanvasProps) {
   const gltf = useLoader(GLTFLoader, '/models/scene.gltf')
   const initialCameraPosition = new THREE.Vector3(2, 2, 2)
 
@@ -22,10 +29,9 @@ export default function ThreeCanvas({ className, ...props }: ThreeCanvasProps) {
   const left = 'left-button'
   const right = 'right-button'
 
-  const touch = true // TODO: Implement menu between touch and keyboard controls
   return (
     <div className={classNames('fixed inset-0', className)} {...props}>
-      {touch && (
+      {controls === 'touch' && (
         <TouchControls
           forward={forward}
           backward={backward}
@@ -39,7 +45,7 @@ export default function ThreeCanvas({ className, ...props }: ThreeCanvasProps) {
           position={[0, 0, 0]}
           children-0-castShadow
         />
-        {touch ? (
+        {controls === 'touch' ? (
           <OrbitCameraControl
             enableKeyboardMovement
             movementSpeed={0.15}
