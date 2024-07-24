@@ -2,15 +2,22 @@ import * as THREE from 'three'
 import { PerspectiveCamera, PointerLockControls } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { useRef, useState, useEffect } from 'react'
+// @ts-expect-error I don't know why this does not work, but I can't get this to work.
 import { PointerLockControls as PointerLockControlsType } from 'three/addons/controls/PointerLockControls'
+import { getCameraCollisionNormal } from '../../utils/three/CameraCollision'
 
-export function PointerLockCameraControl() {
+type PointerLockCameraControlType = {
+  initialCameraPosition: THREE.Vector3
+}
+
+export function PointerLockCameraControl({
+  initialCameraPosition,
+}: PointerLockCameraControlType) {
   const controls = useRef<PointerLockControlsType | null>(null)
-  const cameraPosition = new THREE.Vector3(0, 2, 0)
 
   const keyboardMovementAnimateCallback = useKeyboardMovement({
     controls,
-    cameraPosition,
+    initialCameraPosition,
   })
 
   useFrame(({ scene }) => {
@@ -22,7 +29,7 @@ export function PointerLockCameraControl() {
 
   return (
     <>
-      <PerspectiveCamera position={cameraPosition} />
+      <PerspectiveCamera position={initialCameraPosition} />
       <PointerLockControls ref={controls} />
     </>
   )
@@ -30,10 +37,10 @@ export function PointerLockCameraControl() {
 
 function useKeyboardMovement({
   controls,
-  cameraPosition,
+  initialCameraPosition,
 }: {
   controls: React.MutableRefObject<PointerLockControlsType | null>
-  cameraPosition: THREE.Vector3
+  initialCameraPosition: THREE.Vector3
 }) {
   const moveSpeed = 0.07 // Speed of movement
 
@@ -41,8 +48,6 @@ function useKeyboardMovement({
   const [moveBackward, setMoveBackward] = useState(false)
   const [moveLeft, setMoveLeft] = useState(false)
   const [moveRight, setMoveRight] = useState(false)
-
-  const hasCollision = useCollisionDetection()
 
   const onKeyDown = (event: KeyboardEvent) => {
     switch (event.key) {
@@ -81,7 +86,7 @@ function useKeyboardMovement({
   useEffect(() => {
     document.addEventListener('keydown', onKeyDown)
     document.addEventListener('keyup', onKeyUp)
-    controls.current.camera.position.y = cameraPosition.y
+    controls.current.camera.position.y = initialCameraPosition.y
     new THREE.Raycaster()
     return () => {
       document.removeEventListener('keydown', onKeyDown)
@@ -104,7 +109,10 @@ function useKeyboardMovement({
     direction.x -= Number(moveLeft)
     direction.x += Number(moveRight)
 
-    const intersectNormalVector = hasCollision(controls.current, scene)
+    const intersectNormalVector = getCameraCollisionNormal(
+      controls.current.camera,
+      scene.children // TODO: room for optimisation
+    )
 
     if (intersectNormalVector.x == 0 && intersectNormalVector.z == 0) {
       controls.current.moveForward(direction.z * moveSpeed)
@@ -116,35 +124,4 @@ function useKeyboardMovement({
     }
   }
   return animate
-}
-
-function useCollisionDetection() {
-  const raycasters = [...Array(8).keys()].map(() => new THREE.Raycaster())
-  const origin = new THREE.Vector3()
-
-  const hasCollision = (
-    controls: PointerLockControlsType,
-    scene: THREE.Scene
-  ) => {
-    origin.copy(controls.getObject().position)
-    const direction = new THREE.Vector3(0, 0, 1)
-
-    for (let i = 0; i < raycasters.length; i++) {
-      const raycaster = raycasters[i]
-      direction.applyAxisAngle(new THREE.Vector3(0, 1, 0), (i * Math.PI) / 4)
-      raycaster.set(origin, direction.clone())
-    }
-
-    for (let i = 0; i < raycasters.length; i++) {
-      const ray = raycasters[i]
-      const intersection = ray.intersectObjects(scene.children)[0]
-      if (intersection !== undefined && intersection.distance < 1) {
-        return intersection.face?.normal ?? new THREE.Vector3(0, 0, 0)
-      }
-    }
-
-    return new THREE.Vector3(0, 0, 0)
-  }
-
-  return hasCollision
 }
