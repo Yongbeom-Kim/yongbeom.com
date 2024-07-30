@@ -1,1 +1,2 @@
-cd index && yarn lint-staged
+cd index/index
+yarn lint-staged
