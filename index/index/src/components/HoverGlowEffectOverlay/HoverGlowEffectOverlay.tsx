@@ -15,7 +15,6 @@ export default function HoverGlowEffectOverlay() {
         div.current.style.setProperty('--overlay-radius', `30rem`)
         const handleMouseMove = (e: PointerEvent) => {
             if (div.current) {
-                console.log(e.clientX, e.clientY)
                 div.current.style.setProperty('--overlay-x', `${e.clientX}px`)
                 div.current.style.setProperty('--overlay-y', `${e.clientY}px`)
             }
