@@ -70,7 +70,7 @@ export default function Resume() {
         </Section>
         <Section>
           <SectionHeader className="lg:asdfasdf">EXPERIENCE</SectionHeader>
-          <SubSectionHeader info="May 2024 — Oct 2024, Singapore">
+          <SubSectionHeader info="May 2024 — Aug 2024, Singapore">
             Backend Engineer Intern ·{' '}
             <StyledLink target="_blank" href="https://www.jublia.com">
               Jublia

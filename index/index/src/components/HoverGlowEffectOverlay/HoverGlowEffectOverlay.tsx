@@ -27,6 +27,7 @@ export default function HoverGlowEffectOverlay() {
   return (
     <div
       aria-hidden={true}
+      zz
       className="overlay dark-bg-white bg-teal-700 fixed inset-0 pointer-events-none select-none"
       style={style}
       ref={div}
