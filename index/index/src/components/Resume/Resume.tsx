@@ -19,7 +19,7 @@ export default function Resume() {
         <Section className="lg:col-start-1 lg:col-end-1">
           <Title>Kim Yongbeom</Title>
           <SectionHeader sticky={false}>
-            Year 3 Computer Science Student
+            Final Year Computer Science Student (NUS)
           </SectionHeader>
           <SectionDescription>
             <p>
@@ -56,8 +56,34 @@ export default function Resume() {
               {' '}
               When I am not buried in schoolwork or a project, I am either
               playing Tetris, watching videos/dramas, or hanging out with my
-              girlfriend.
+              girlfriend. I will be graduating from NUS in December 2025, and am
+              looking for a spring (Jan-Jun 2025) internship.
             </p>
+          </SectionDescription>
+        </Section>
+        <Section>
+          <SectionHeader>SKILLS</SectionHeader>
+          <SectionDescription>
+            <span>
+              <span className="text-slate-100">Languages:</span> Python ·
+              TypeScript · JavaScript · C++ · Java{' '}
+            </span>
+            <span>
+              <span className="text-slate-100">Databases:</span> PostgreSQL ·
+              MySQL · SQLite · Redis · Firestore · AWS Neptune
+            </span>
+            <span>
+              <span className="text-slate-100">Cloud:</span> Terraform · Amazon
+              WebServices · Hetzner
+            </span>
+            <span>
+              <span className="text-slate-100">Frameworks:</span> React ·
+              Express.js · Flask
+            </span>
+            <span>
+              <span className="text-slate-100">Tools:</span> Next.js · Vite ·
+              Jest · pytest · Linux · Bash · GNU Make
+            </span>
           </SectionDescription>
         </Section>
         <Section>
