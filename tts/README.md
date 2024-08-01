@@ -1,5 +1,10 @@
 # [tts.yongbeom.com](https://tts.yongbeom.com)
 
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/b60ee508-01a1-4ad5-815d-54fb35a1b445" width="50%">
+</p>
+
+
 A wrapper around OpenAI's whisper model as a convenient interface to do text-to-speech generation.
 
 This project does:
@@ -41,3 +46,7 @@ When you request an audio file to be translated, the following happens:
 5. Run `yarn` in the frontend directory.
 6. Run `terraform init`, `terraform plan` and `terraform apply` (or `tofu`) in the frontend directory.
 7. Your app should be deployed!
+
+## TODOs
+- Add Authentication, so that my wallet will be safe.
+- Improve infrastructure (currently, window cannot be closed or else job will be lost. RunPod instance should directly upload results to S3 bucket.)
