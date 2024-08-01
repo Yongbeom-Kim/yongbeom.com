@@ -65,24 +65,30 @@ export default function Resume() {
           <SectionHeader>SKILLS</SectionHeader>
           <SectionDescription>
             <span>
-              <span className="text-slate-100">Languages:</span> Python ·
-              TypeScript · JavaScript · C++ · Java{' '}
+              <span className="dark:text-slate-100 text-slate-950">
+                Languages:
+              </span>{' '}
+              Python · TypeScript · JavaScript · C++ · Java{' '}
             </span>
             <span>
-              <span className="text-slate-100">Databases:</span> PostgreSQL ·
-              MySQL · SQLite · Redis · Firestore · AWS Neptune
+              <span className="dark:text-slate-100 text-slate-950">
+                Databases:
+              </span>{' '}
+              PostgreSQL · MySQL · SQLite · Redis · Firestore · AWS Neptune
             </span>
             <span>
-              <span className="text-slate-100">Cloud:</span> Terraform · Amazon
-              WebServices · Hetzner
+              <span className="dark:text-slate-100 text-slate-950">Cloud:</span>{' '}
+              Terraform · Amazon WebServices · Hetzner
             </span>
             <span>
-              <span className="text-slate-100">Frameworks:</span> React ·
-              Express.js · Flask
+              <span className="dark:text-slate-100 text-slate-950">
+                Frameworks:
+              </span>{' '}
+              React · Express.js · Flask
             </span>
             <span>
-              <span className="text-slate-100">Tools:</span> Next.js · Vite ·
-              Jest · pytest · Linux · Bash · GNU Make
+              <span className="dark:text-slate-100 text-slate-950">Tools:</span>{' '}
+              Next.js · Vite · Jest · pytest · Linux · Bash · GNU Make
             </span>
           </SectionDescription>
         </Section>
