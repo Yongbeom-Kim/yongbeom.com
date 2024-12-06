@@ -243,8 +243,8 @@ export default function Resume() {
             {['Python', 'Flask', 'RunPod', 'AWS', 'Terraform']}
           </SubSectionSkills>
           <SubSectionHeader>
-            <StyledLink target="_blank" href="https://chemquest.fly.dev">
-              ChemQuest
+            <StyledLink target="_blank" href="https://hydragen.fly.dev">
+              Hydragen
             </StyledLink>
           </SubSectionHeader>
           <SubSectionDescription>
@@ -261,7 +261,7 @@ export default function Resume() {
           <SubSectionSkills>
             {['Python', 'Flask', 'Selenium (WebDriver)']}
           </SubSectionSkills>
-          <SubSectionHeader>
+          {/* <SubSectionHeader>
             RBZ Academic Review Extension (
             <StyledLink
               target="_blank"
@@ -275,7 +275,7 @@ export default function Resume() {
             Cross-browser extension to automate metadata research for the
             Raffles Bulletin of Zoology.
           </SubSectionDescription>
-          <SubSectionSkills>{['Typescript', 'React']}</SubSectionSkills>
+          <SubSectionSkills>{['Typescript', 'React']}</SubSectionSkills> */}
           <SubSectionHeader>ITS Compliation Error Repair</SubSectionHeader>
           <SubSectionDescription>
             Java service to automatically repair errors in student programs.
