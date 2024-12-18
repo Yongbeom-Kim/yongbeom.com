@@ -5,6 +5,7 @@ import {
   IconHome,
   IconMail,
   IconProps,
+  IconSchool,
 } from '@tabler/icons-react'
 import classNames from 'classnames'
 
@@ -54,6 +55,10 @@ export default function Socials({
       <SocialIcon
         icon={IconBrandGithub}
         href="https://github.com/Yongbeom-Kim"
+      />
+      <SocialIcon
+        icon={IconSchool}
+        href="https://scholar.google.com/citations?hl=en&user=EYq---QAAAAJ"
       />
     </div>
   )

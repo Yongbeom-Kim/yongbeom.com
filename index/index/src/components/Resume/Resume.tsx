@@ -23,13 +23,20 @@ export default function Resume() {
           </SectionHeader>
           <SectionDescription>
             <p>
-              I might not be able to design a webpage to save my life, but I can
-              write and deploy its backend endpoints.
+              Fullstack engineer. I find great joy in solving problems, and
+              empowering people with technology. Loves Education Technology,
+              Linux and Oxford commas.
             </p>
           </SectionDescription>
         </Section>
         <SectionNav
-          headers={['ABOUT', 'EDUCATION', 'EXPERIENCE', 'PROJECTS']}
+          headers={[
+            'ABOUT',
+            'EDUCATION',
+            'EXPERIENCE',
+            'PROJECTS',
+            'PUBLICATIONS',
+          ]}
           className="hidden lg:block"
         />
         <Section className="lg:col-start-1 lg:col-end-1">
@@ -41,23 +48,23 @@ export default function Resume() {
           <SectionHeader className="lg:asdfasdf">ABOUT</SectionHeader>
           <SectionDescription>
             <p>
-              In 2021, I told myself, "Hey, I like the problem-solving of CS"
-              and dove headfirst into the major. Since then, I've been exploring
-              every single thing I could - from the standard fullstack web
-              development to slightly more obscure SysAdmin projects.
+              In 2021, I chose to do go into CS on a whim. And if I were to toot
+              my own horn, what a good decision it was. Since then, I've gone an
+              explored as many technologies as I could, from languages, tools
+              and frameworks, to the not-so-free cloud and databases.
             </p>
             <p>
-              Today, I still find myself more interested in the problems
-              themselves, rather than the technical details - all the way from
-              LeetCode problems to bus scheduling apps on Jeju Island
-              (Seriously, even I could do better).
+              Today, instead of what technologies to use, I find myself more
+              interested in the problems themselves. Do the technologies
+              themselves matter? Not really, as long as it suits the problem.
+              Beyond tech projects, I find myself interested in pedagogy and
+              education, and I've co-written some publications on the topic.
+              Much thanks to Dr Fung for the opportunity.
             </p>
             <p>
-              {' '}
               When I am not buried in schoolwork or a project, I am either
               playing Tetris, watching videos/dramas, or hanging out with my
-              girlfriend. I will be graduating from NUS in December 2025, and am
-              looking for a spring (Jan-Jun 2025) internship.
+              girlfriend. I will be graduating from NUS in December 2025.
             </p>
           </SectionDescription>
         </Section>
@@ -68,27 +75,23 @@ export default function Resume() {
               <span className="dark:text-slate-100 text-slate-950">
                 Languages:
               </span>{' '}
-              Python · TypeScript · JavaScript · C++ · Java{' '}
+              JavaScript/TypeScript · Python · Java · Go · C++ · HTML/CSS · Bash
+              · Make
+            </span>
+            <span>
+              <span className="dark:text-slate-100 text-slate-950">Tools:</span>{' '}
+              Unix · Docker · GitHub Actions · CircleCI · React · NextJS ·
+              Express.js · Flask · SQLAlchemy · Selenium (Web Scraping)
             </span>
             <span>
               <span className="dark:text-slate-100 text-slate-950">
                 Databases:
               </span>{' '}
-              PostgreSQL · MySQL · SQLite · Redis · Firestore · AWS Neptune
+              PostgreSQL · MySQL · SQLite · Redis · Firestore
             </span>
             <span>
               <span className="dark:text-slate-100 text-slate-950">Cloud:</span>{' '}
-              Terraform · Amazon WebServices · Hetzner
-            </span>
-            <span>
-              <span className="dark:text-slate-100 text-slate-950">
-                Frameworks:
-              </span>{' '}
-              React · Express.js · Flask
-            </span>
-            <span>
-              <span className="dark:text-slate-100 text-slate-950">Tools:</span>{' '}
-              Next.js · Vite · Jest · pytest · Linux · Bash · GNU Make
+              Terraform · Amazon Web Services · Hetzner · Google Cloud Platform
             </span>
           </SectionDescription>
         </Section>
@@ -110,11 +113,21 @@ export default function Resume() {
           </SubSectionHeader>
           <SubSectionDescription>
             <p>
-              Backend engineer developing services engagement during events.
+              As a backend engineer, I focused on developing services to enhance
+              engagement during events.
             </p>
             <p>
-              Currently implementing and optimizing event hall routing and
-              navigation algorithms.
+              • Boosted event map pathfinding performance by over 60% with a
+              novel OpenCV and unsupervised clustering approach, enabling
+              real-time user navigation.
+            </p>
+            <p>
+              • Developed 3 Flask API endpoints for pathfinding algorithm
+              interface with event organizers and attendees.
+            </p>
+            <p>
+              • Implemented storage and caching in MySQL and Redis to improve
+              backend performance in Flask endpoints.
             </p>
           </SubSectionDescription>
           <SubSectionSkills>
@@ -127,7 +140,7 @@ export default function Resume() {
               'OpenCV',
             ]}
           </SubSectionSkills>
-          <SubSectionHeader info="May 2023 — May 2024, Singapore">
+          <SubSectionHeader info="May 2023 — Dec 2023, Singapore">
             Software Engineering & DevOps Intern ·{' '}
             <StyledLink target="_blank" href="https://www.fabrica.ai">
               Fabrica.AI
@@ -135,12 +148,21 @@ export default function Resume() {
           </SubSectionHeader>
           <SubSectionDescription>
             <p>
-              Sped up development process by 60% by developing and introducing
-              CI/CD pipelines for Docker images.
+              Initially, I came in as a software engineer working on robot
+              control, but I really liked doing DevOps here!
             </p>
             <p>
-              Set up and managed internal company tools on both cloud and local
-              deployments.
+              • Sped development lifecycle by 60% by implementing a Docker-based
+              CI/CD pipeline using GitHub Actions.
+            </p>
+            <p>
+              • Cut ARM Docker build times by over 90% with ARM-based Linux
+              servers for CI/CD for same-day testing of features on software and
+              robotic hardware.
+            </p>
+            <p>
+              • Migrated internal tools to Hetzner servers with Nginx, improving
+              stability and reducing latency by up to 40%.
             </p>
           </SubSectionDescription>
           <SubSectionSkills>
@@ -154,7 +176,7 @@ export default function Resume() {
               'Nginx',
             ]}
           </SubSectionSkills>
-          <SubSectionHeader info="Dec 2023 — Jan 2024, Singapore">
+          {/* <SubSectionHeader info="Dec 2023 — Jan 2024, Singapore">
             Web Developer Intern ·{' '}
             <StyledLink target="_blank" href="https://www.growthbeans.com">
               GrowthBeans
@@ -176,42 +198,7 @@ export default function Resume() {
               'Firebase Storage',
               'Firestore DB',
             ]}
-          </SubSectionSkills>
-          <SubSectionHeader info="Jan 2023 — Dec 2023, Singapore">
-            Part-Time Student Developer ·{' '}
-            <StyledLink target="_blank" href="https://sourceacademy.org">
-              Source Academy
-            </StyledLink>
-          </SubSectionHeader>
-
-          <SubSectionDescription>
-            {/* TODO: link to module */}
-            <p>
-              Integrated WebAssembly into Source Academy, an introductory
-              learning platform for programming.
-            </p>
-            <p>
-              I Developed the{' '}
-              <StyledLink
-                target="_blank"
-                href="https://source-academy.github.io/modules/documentation/modules/wasm.html"
-              >
-                <code>wasm</code>
-              </StyledLink>{' '}
-              module (
-              <StyledLink
-                target="_blank"
-                href="https://github.com/source-academy/wabt"
-              >
-                GitHub
-              </StyledLink>
-              ): an WebAssembly Text-to-Bytecode compiler and an integration of
-              the WebAssembly runtime into the platform frontend.
-            </p>
-          </SubSectionDescription>
-          <SubSectionSkills>
-            {['WebAssembly', 'TypeScript', 'C++', 'CPP (C Preprocessor)']}
-          </SubSectionSkills>
+          </SubSectionSkills> */}
         </Section>
         <Section>
           <SectionHeader className="lg:asdfasdf">PROJECTS</SectionHeader>
@@ -230,13 +217,19 @@ export default function Resume() {
           </SubSectionHeader>
           <SubSectionDescription>
             <p>
-              Web Interface as a tts (Text To Speech) service. This is a
-              web-based wrapper around OpenAI's whisper model.
+              Web Interface as a speech to text transcription service with
+              OpenAI Whisper. When I made this, I hated how expensive
+              transcription APIs were, despite how cheap it was to run the
+              Whipser transcription model.
+            </p>
+            <p>• Cost of &lt;10% of managed transcription APIs.</p>
+            <p>
+              • Built with React frontend and Dockerized Flask backend, deployed
+              using Terraform on AWS.
             </p>
             <p>
-              Hosted on a RunPod serverless GPU instance with a flask proxy on
-              AWS Lambda. When I have time, I will write an OAuth server under{' '}
-              <code>auth.yongbeom.com</code> for authentication.
+              • Deployed OpenAI Whisper model on RunPod for cost-effective
+              transcription.
             </p>
           </SubSectionDescription>
           <SubSectionSkills>
@@ -249,19 +242,65 @@ export default function Resume() {
           </SubSectionHeader>
           <SubSectionDescription>
             <p>
-              Web service in collaboration with NUS Chemistry to procedurally
-              generate spectroscopy questions for students, with no intervention
-              from faculty.
+              Web service in collaboration with NUS Chemistry to generate
+              personalized spectroscopy questions for students, with no
+              intervention from faculty.
             </p>
             <p>
-              Spectroscopic data is obtained from manually scraping Chemistry
-              database websites.
+              • Scraped spectroscopic data of over 50,000 molecules with a web
+              scraper in Python and Selenium.
+            </p>
+            <p>
+              • Developed a Flask/PostgreSQL recommendation system based on Elo
+              ratings to personalize questions for students.
             </p>
           </SubSectionDescription>
           <SubSectionSkills>
             {['Python', 'Flask', 'Selenium (WebDriver)']}
           </SubSectionSkills>
-          {/* <SubSectionHeader>
+          <SubSectionHeader>
+            <StyledLink
+              target="_blank"
+              href="https://source-academy.github.io/modules/documentation/modules/wasm.html"
+            >
+              WebAssembly Module @ Source Academy
+            </StyledLink>{' '}
+            (
+            <StyledLink
+              target="_blank"
+              href="https://github.com/source-academy/wabt"
+            >
+              GitHub
+            </StyledLink>
+            )
+          </SubSectionHeader>
+          <SubSectionDescription>
+            <p>
+              I wrote the{' '}
+              <code>
+                <StyledLink
+                  target="_blank"
+                  href="https://source-academy.github.io/modules/documentation/modules/wasm.html"
+                >
+                  wasm
+                </StyledLink>
+              </code>{' '}
+              module, a WebAssembly Text-to-bytecode compiler written in
+              TypeScript (&gt;10k LoC).
+            </p>
+            <p>
+              • Integrated the V8 WebAssembly runtime into Source Academy for
+              students to run stack-based virtual machines.
+            </p>
+            <p>
+              • Developed a Flask/PostgreSQL recommendation system based on Elo
+              ratings to personalize questions for students.
+            </p>
+          </SubSectionDescription>
+          <SubSectionSkills>
+            {['Python', 'Flask', 'Selenium (WebDriver)']}
+          </SubSectionSkills>
+          <SubSectionHeader>
             RBZ Academic Review Extension (
             <StyledLink
               target="_blank"
@@ -275,7 +314,7 @@ export default function Resume() {
             Cross-browser extension to automate metadata research for the
             Raffles Bulletin of Zoology.
           </SubSectionDescription>
-          <SubSectionSkills>{['Typescript', 'React']}</SubSectionSkills> */}
+          <SubSectionSkills>{['Typescript', 'React']}</SubSectionSkills>
           <SubSectionHeader>ITS Compliation Error Repair</SubSectionHeader>
           <SubSectionDescription>
             Java service to automatically repair errors in student programs.
@@ -291,6 +330,142 @@ export default function Resume() {
             <p>Developed the tokenizer and parser for the language.</p>
           </SubSectionDescription>
           <SubSectionSkills>{['C++']}</SubSectionSkills>
+        </Section>
+
+        <Section>
+          <SectionHeader>PUBLICATIONS</SectionHeader>
+          <SectionDescription>
+            <p>
+              <StyledLink
+                target="_blank"
+                href="https://doi.org/10.1039/9781839167942-00376"
+              >
+                <span className="dark:text-slate-100 text-slate-950">
+                  Bringing Back Learning Communities in the 21st Century
+                </span>
+              </StyledLink>
+              <br />
+              FM Fung,{' '}
+              <span className="dark:text-slate-300 text-slate-900">Y Kim</span>
+              <br />
+              Royal Society of Chemistry, 2023
+            </p>
+            <p>
+              <StyledLink
+                target="_blank"
+                href="https://doi.org/10.1021/acs.jchemed.2c00553"
+              >
+                <span className="dark:text-slate-100 text-slate-950">
+                  Supplementary Discourse-Forming an Online Learning Community
+                  with Asynchronous Discussions
+                </span>
+              </StyledLink>
+              <br />
+              <span className="dark:text-slate-300 text-slate-900">Y Kim</span>,
+              CI Wijaya Ong, FM Fung
+              <br />
+              Journal of Chemical Education 100 (2), 496-506, 2023
+            </p>
+            <p>
+              <StyledLink
+                target="_blank"
+                href="https://doi.org/10.1021/acs.jchemed.1c00842"
+              >
+                <span className="dark:text-slate-100 text-slate-950">
+                  Supporting social and learning presence in the revised
+                  community of inquiry framework for hybrid learning
+                </span>
+              </StyledLink>
+              <br />
+              BJM Ng, JY Han,{' '}
+              <span className="dark:text-slate-300 text-slate-900">Y Kim</span>,
+              KA Togo, JY Chew, Y Lam, FM Fung
+              <br />
+              Journal of Chemical Education 99 (2), 708-714, 2021
+            </p>
+            <p>
+              <StyledLink
+                target="_blank"
+                href="https://doi.org/10.1109/TALE52509.2021.9678925"
+              >
+                <span className="dark:text-slate-100 text-slate-950">
+                  Does team teaching improve student engagement in an age of
+                  digital learning
+                </span>
+              </StyledLink>
+              <br />
+              <span className="dark:text-slate-300 text-slate-900">Y Kim</span>,
+              JY Han, FM Fung
+              <br />
+              2021 IEEE International Conference on Engineering, Technology &
+              Education, 2021
+            </p>
+            <p>
+              <StyledLink
+                target="_blank"
+                href="https://doi.org/10.1109/TALE52509.2021.9678765"
+              >
+                <span className="dark:text-slate-100 text-slate-950">
+                  ChemPOV: Digitizing an Organic Chemistry Boardgame to Support
+                  Online Learning
+                </span>
+              </StyledLink>
+              <br />
+              FM Fung, Y Lam, J Yap, DA Musalli, JY Han, K Togo,{' '}
+              <span className="dark:text-slate-300 text-slate-900">Y Kim</span>
+              <br />
+              2021 IEEE International Conference on Engineering, Technology &
+              Education, 2021
+            </p>
+            <p>
+              <StyledLink
+                target="_blank"
+                href="https://scholar.archive.org/work/2psryiwzrncnzdbbgwl5jfgkau/access/wayback/http://publi.math.unideb.hu/load_pdf.php?p=2431"
+              >
+                <span className="dark:text-slate-100 text-slate-950">
+                  A sharp trigonometric double inequality
+                </span>
+              </StyledLink>
+              <br />
+              <span className="dark:text-slate-300 text-slate-900">Y Kim</span>,
+              TY Lee, S Vengat, HX Sim, JKH Tai
+              <br />
+              Publicationes Mathematicae-Debrecen 98 (1-2), 231-242, 2021
+            </p>
+            <p>
+              <StyledLink
+                target="_blank"
+                href="https://doi.org/10.1016/B978-0-12-822879-1.00010-X"
+              >
+                <span className="dark:text-slate-100 text-slate-950">
+                  Adopting a flipped classroom to teach and learn SciFinder in
+                  an undergraduate chemistry laboratory course
+                </span>
+              </StyledLink>
+              <br />H Anuar,{' '}
+              <span className="dark:text-slate-300 text-slate-900">Y Kim</span>,
+              TH Tan, FM Fung
+              <br />
+              Technology-Enabled Blended Learning Experiences for Chemistry
+              Education, 2021
+            </p>
+            <p>
+              <StyledLink
+                target="_blank"
+                href="https://www.channelnewsasia.com/commentary/parents-academic-stress-psle-students-exam-children-1825846"
+              >
+                <span className="dark:text-slate-100 text-slate-950">
+                  Commentary: Parents play an outsized role in academic stress
+                  children face
+                </span>
+              </StyledLink>
+              <br />
+              FM Fung,{' '}
+              <span className="dark:text-slate-300 text-slate-900">Y Kim</span>
+              <br />
+              Channel News Asia, 2021
+            </p>
+          </SectionDescription>
         </Section>
       </div>
     </>

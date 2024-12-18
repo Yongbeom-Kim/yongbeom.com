@@ -31,7 +31,7 @@ type SectionProps = DetailedHTMLProps<
 
 export const Section = ({ children, className, ...props }: SectionProps) => {
   return (
-    <div {...props} className={classNames('mt-6 flex flex-col', className)}>
+    <div {...props} className={classNames('my-6 flex flex-col', className)}>
       {children}
     </div>
   )
