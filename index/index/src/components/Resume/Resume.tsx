@@ -152,12 +152,13 @@ export default function Resume() {
               control, but I really liked doing DevOps here!
             </p>
             <p>
-              • Sped development lifecycle by 60% by implementing a Docker-based
-              CI/CD pipeline using GitHub Actions.
+              • I implemented Fabrica.AI's first CI/CD pipeline using Docker &
+              GitHub Actions, speeding up development lifecycle by 60%.
             </p>
             <p>
-              • Cut ARM Docker build times by over 90% with ARM-based Linux
-              servers for CI/CD for same-day testing of features on software and
+              • Cut ARM Docker build times by over 90% by transitioning from
+              QEMU emulation / building on robotic hardware to ARM-based Linux
+              servers for CI/CD, enabling same-day testing on both software and
               robotic hardware.
             </p>
             <p>
